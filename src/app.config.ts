@@ -14,6 +14,7 @@ export default defineAppConfig({
     'pages/calendar/index',
     'pages/family/index',
     'pages/child-profile/index',
+    'pages/review-center/index',
     'pages/rules/index',
     'pages/promise/index'
   ],

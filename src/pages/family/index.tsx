@@ -4,6 +4,7 @@ import Taro from '@tarojs/taro'
 import classnames from 'classnames'
 import styles from './index.module.scss'
 import { useAppStore } from '../../store/useAppStore'
+import { formatDate } from '../../utils'
 import MemberAvatar from '../../components/MemberAvatar'
 
 const rankEmojis = ['🥇', '🥈', '🥉']
@@ -23,6 +24,8 @@ const FamilyPage: React.FC = () => {
   const {
     familyMembers,
     tasks,
+    pointRecords,
+    exchangeRecords,
     adjustPoints,
     setCurrentMember,
     currentRole,
@@ -68,23 +71,37 @@ const FamilyPage: React.FC = () => {
     [childMembers]
   )
 
-  const currentMonthPoints = useMemo(() => {
-    const now = new Date()
-    const year = now.getFullYear()
-    const month = now.getMonth()
-    const map: Record<string, number> = {}
-    tasks
-      .filter((t) => {
-        const d = new Date(t.createdAt)
-        return d.getFullYear() === year && d.getMonth() === month && t.status === 'done'
+  const pendingReviewCount = useMemo(() => {
+    let count = 0
+    tasks.forEach((t: any) => {
+      const perMember = t.perMemberStatus || {}
+      Object.values(perMember).forEach((s: any) => {
+        if (s.status === 'checking') count++
       })
-      .forEach((t) => {
-        t.assignedTo.forEach((id) => {
-          map[id] = (map[id] || 0) + t.points
-        })
+    })
+    count += exchangeRecords.filter((r) => r.status === 'pending').length
+    return count
+  }, [tasks, exchangeRecords])
+
+  const goReviewCenter = () => {
+    Taro.navigateTo({ url: '/pages/review-center/index' })
+  }
+
+  const currentMonthPoints = useMemo(() => {
+    const currentMonth = formatDate(new Date(), 'YYYY-MM')
+    const earnTypes = ['earn', 'bonus', 'reward']
+    const map: Record<string, number> = {}
+    pointRecords
+      .filter((r) => {
+        if (!earnTypes.includes(r.type)) return false
+        const recordMonth = formatDate(r.createdAt, 'YYYY-MM')
+        return recordMonth === currentMonth
+      })
+      .forEach((r) => {
+        map[r.memberId] = (map[r.memberId] || 0) + r.amount
       })
     return map
-  }, [tasks])
+  }, [pointRecords])
 
   const getRoleTag = (name: string) => {
     if (name.includes('爸') || name.includes('父')) return 'dad'
@@ -224,6 +241,23 @@ const FamilyPage: React.FC = () => {
           </View>
         </View>
       </View>
+
+      {currentRole === 'parent' && (
+        <View className={styles.reviewCenterEntry} onClick={goReviewCenter}>
+          <View className={styles.reviewCenterLeft}>
+            <Text className={styles.reviewCenterIcon}>📋</Text>
+            <View className={styles.reviewCenterTexts}>
+              <View className={styles.reviewCenterTitle}>家长审核中心</View>
+              <View className={styles.reviewCenterSub}>
+                {pendingReviewCount > 0
+                  ? `${pendingReviewCount}项待处理`
+                  : '暂无待处理事项'}
+              </View>
+            </View>
+          </View>
+          <Text className={styles.reviewCenterArrow}>›</Text>
+        </View>
+      )}
 
       <View className={styles.sectionTitle}>👨‍👩‍👧 家长</View>
 

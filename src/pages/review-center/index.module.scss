@@ -1,0 +1,395 @@
+@use '@/styles/variables.scss' as *;
+
+.segmentedTabs {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-xs;
+  margin-bottom: $spacing-lg;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.segmentItem {
+  flex: 1;
+  position: relative;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+  font-weight: $font-weight-medium;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 8rpx;
+  right: 20rpx;
+  min-width: 32rpx;
+  height: 32rpx;
+  padding: 0 8rpx;
+  background: #FF4757;
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.taskCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+  position: relative;
+}
+
+.resubmitBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, #FF9F43 0%, #FFD93D 100%);
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: $font-weight-semibold;
+  padding: 8rpx 20rpx;
+  border-top-right-radius: $radius-lg;
+  border-bottom-left-radius: $radius-lg;
+}
+
+.taskHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.childAvatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-sm;
+  border: 3rpx solid $color-bg-soft;
+  flex-shrink: 0;
+}
+
+.taskHeaderInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.childName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.taskTitle {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.taskEmoji {
+  margin-right: 6rpx;
+  font-size: $font-size-md;
+}
+
+.taskTitleText {
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.taskPhotoWrap {
+  margin-bottom: $spacing-md;
+}
+
+.taskPhoto {
+  width: 100%;
+  height: 360rpx;
+  border-radius: $radius-md;
+}
+
+.taskMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+}
+
+.metaRow {
+  display: flex;
+  align-items: flex-start;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  line-height: 1.5;
+}
+
+.metaIcon {
+  margin-right: 8rpx;
+  flex-shrink: 0;
+}
+
+.metaText {
+  flex: 1;
+}
+
+.actionRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.rejectBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-card;
+  color: #FF6B6B;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: 2rpx solid #FF6B6B;
+  @include button-reset;
+
+  &:active {
+    background: rgba(255, 107, 107, 0.08);
+    transform: scale(0.98);
+  }
+}
+
+.passBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, #00B894 0%, #55EFC4 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: none;
+  @include button-reset;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.passBtnText {
+  display: inline-flex;
+  align-items: center;
+}
+
+.exchangeCard {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.rewardImage {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.exchangeContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.exchangeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-xs;
+}
+
+.rewardName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+  margin-right: $spacing-sm;
+}
+
+.exchangeInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.memberInfo {
+  display: flex;
+  align-items: center;
+}
+
+.memberName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.quantity {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.exchangeTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.exchangeFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: $spacing-sm;
+}
+
+.pointsValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: #FF9F43;
+}
+
+.pointsUnit {
+  font-size: $font-size-xs;
+  color: #FF9F43;
+  margin-left: 4rpx;
+}
+
+.exchangeActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.exchangeApproveBtn {
+  height: 56rpx;
+  padding: 0 28rpx;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, #00B894 0%, #55EFC4 100%);
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  border: none;
+  @include button-reset;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.exchangeRejectBtn {
+  height: 56rpx;
+  padding: 0 28rpx;
+  border-radius: $radius-button;
+  background: $color-bg-card;
+  color: #FF6B6B;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  border: 2rpx solid #FF6B6B;
+  @include button-reset;
+
+  &:active {
+    background: rgba(255, 107, 107, 0.08);
+    transform: scale(0.98);
+  }
+}
+
+.modalMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 600rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-popup;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalTextarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: $spacing-md;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  margin-bottom: $spacing-lg;
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.cancelBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-soft;
+  color: $color-text-secondary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border: none;
+  @include button-reset;
+}
+
+.confirmRejectBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: none;
+  @include button-reset;
+}

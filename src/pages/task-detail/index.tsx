@@ -241,6 +241,29 @@ const TaskDetailPage: React.FC = () => {
                 </View>
               </View>
 
+              {(memberState.status === 'pending' || memberState.status === 'checking') && (
+                <View style={{ marginTop: -8, marginBottom: 16 }}>
+                  {(() => {
+                    const nextStreak = member.streak + 1
+                    const isBonusDay = nextStreak % task.bonusDays === 0
+                    if (isBonusDay) {
+                      return (
+                        <Text style={{ fontSize: 22, color: '#00B894' }}>
+                          🔥 本次完成将触发连续奖励 +{task.bonusPoints}分
+                        </Text>
+                      )
+                    } else {
+                      const daysLeft = task.bonusDays - ((nextStreak % task.bonusDays) || task.bonusDays)
+                      return (
+                        <Text style={{ fontSize: 22, color: '#999' }}>
+                          还差 {daysLeft} 天触发连续 +{task.bonusPoints}分奖励
+                        </Text>
+                      )
+                    }
+                  })()}
+                </View>
+              )}
+
               {memberState.status === 'rejected' && memberState.remark && (
                 <View className={styles.remarkBox}>
                   <View className={styles.remarkLabel}>驳回原因</View>
@@ -253,6 +276,23 @@ const TaskDetailPage: React.FC = () => {
                   <Text className={styles.approvedText}>
                     ✅ {checkedByMember.name} 于 {formatDateTime(memberState.checkedAt)} 审核通过
                   </Text>
+                  <View style={{ marginTop: 8 }}>
+                    {(() => {
+                      const earnedPoints = memberState.earnedPoints || 0
+                      const bonusPoints = memberState.bonusPoints || 0
+                      const bonusTriggered = memberState.bonusTriggered
+                      const total = earnedPoints + bonusPoints
+                      return (
+                        <Text style={{ fontSize: 24, color: '#FF9F43', fontWeight: 600 }}>
+                          💸 获得 基础分 +{earnedPoints}
+                          {bonusTriggered && bonusPoints > 0 && (
+                            <> 🎁 +{bonusPoints} 连续奖励</>
+                          )}
+                          {' '}= +{total} 分
+                        </Text>
+                      )
+                    })()}
+                  </View>
                 </View>
               )}
 

@@ -26,6 +26,7 @@ const taskTypeEmoji: Record<string, string> = {
 }
 
 const sectionTabs = [
+  { key: 'report', label: '📊 月报' },
   { key: 'task', label: '任务' },
   { key: 'points', label: '积分' },
   { key: 'exchange', label: '兑换' },
@@ -48,7 +49,8 @@ const ChildProfilePage: React.FC = () => {
   const childMembers = familyMembers.filter((m) => m.role === 'child')
   const initialMemberId = routeMemberId || childMembers[0]?.id
   const [selectedMemberId, setSelectedMemberId] = useState(initialMemberId)
-  const [activeTab, setActiveTab] = useState('task')
+  const [activeTab, setActiveTab] = useState('report')
+  const [reportMonth, setReportMonth] = useState(dayjs())
 
   const handleMemberSwitch = (memberId: string) => {
     setSelectedMemberId(memberId)
@@ -84,7 +86,7 @@ const ChildProfilePage: React.FC = () => {
       .reduce((s, r) => s + r.amount, 0)
 
     const approvedExchanges = exchangeRecords.filter(
-      (e) => e.memberId === selectedMemberId && e.status === 'approved'
+      (e) => e.memberId === selectedMemberId && e.status !== 'rejected'
     ).length
 
     const photoCount = growthRecords
@@ -145,6 +147,87 @@ const ChildProfilePage: React.FC = () => {
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )
   }, [growthRecords, selectedMemberId])
+
+  const reportMonthStr = formatDate(reportMonth.toDate(), 'YYYY-MM')
+
+  const reportStats = useMemo(() => {
+    const monthStart = reportMonth.startOf('month').toDate().getTime()
+    const monthEnd = reportMonth.endOf('month').toDate().getTime()
+
+    const inMonth = (dateStr: string) => {
+      const t = new Date(dateStr).getTime()
+      return t >= monthStart && t <= monthEnd
+    }
+
+    const doneTasks = tasks.filter((t) => {
+      const ms = t.perMemberStatus?.[selectedMemberId]
+      if (!ms || ms.status !== 'done') return false
+      return inMonth(ms.checkedAt || t.createdAt)
+    })
+
+    const monthPointRecords = pointRecords.filter(
+      (r) => r.memberId === selectedMemberId && inMonth(r.createdAt)
+    )
+
+    const basePoints = monthPointRecords
+      .filter((r) => r.type === 'earn' && r.sourceType === 'task')
+      .reduce((s, r) => s + r.amount, 0)
+
+    const bonusPoints = monthPointRecords
+      .filter((r) => r.type === 'bonus')
+      .reduce((s, r) => s + r.amount, 0)
+
+    const rewardPoints = monthPointRecords
+      .filter((r) => r.type === 'reward')
+      .reduce((s, r) => s + r.amount, 0)
+
+    const monthExchanges = exchangeRecords.filter(
+      (e) =>
+        e.memberId === selectedMemberId &&
+        inMonth(e.createdAt) &&
+        (e.status === 'pending' || e.status === 'approved' || e.status === 'delivered')
+    )
+    const exchangeCost = monthExchanges.reduce((s, e) => s + e.points, 0)
+
+    const photoCount = growthRecords
+      .filter((g) => g.memberId === selectedMemberId && inMonth(g.createdAt))
+      .reduce((s, g) => s + g.photos.length, 0)
+
+    const netGrowth = basePoints + bonusPoints + rewardPoints - exchangeCost
+
+    return {
+      doneCount: doneTasks.length,
+      basePoints,
+      bonusPoints,
+      exchangeCost,
+      photoCount,
+      netGrowth,
+      doneTasks,
+      monthExchanges
+    }
+  }, [
+    tasks,
+    pointRecords,
+    exchangeRecords,
+    growthRecords,
+    selectedMemberId,
+    reportMonthStr
+  ])
+
+  const handlePrevMonth = () => setReportMonth(reportMonth.subtract(1, 'month'))
+  const handleNextMonth = () => {
+    const next = reportMonth.add(1, 'month')
+    if (next.isAfter(dayjs(), 'month')) return
+    setReportMonth(next)
+  }
+
+  const goTaskDetail = (taskId: string) => {
+    Taro.navigateTo({ url: `/pages/task-detail/index?taskId=${taskId}` })
+  }
+
+  const goRewardDetail = (rewardId: string) => {
+    Taro.navigateTo({ url: `/pages/reward-detail/index?rewardId=${rewardId}` })
+  }
 
   const getRecordIcon = (type: string) => {
     const iconMap: Record<string, string> = {
@@ -240,6 +323,225 @@ const ChildProfilePage: React.FC = () => {
         </View>
 
         <View className={styles.sectionTabContent}>
+          {activeTab === 'report' && (
+            <View>
+              <View className={styles.monthSwitcher}>
+                <View
+                  className={styles.monthArrow}
+                  onClick={handlePrevMonth}
+                >
+                  ←
+                </View>
+                <Text className={styles.monthText}>
+                  {reportMonth.format('YYYY年M月')}
+                </Text>
+                <View
+                  className={classnames(
+                    styles.monthArrow,
+                    reportMonth.isSame(dayjs(), 'month') && styles.disabled
+                  )}
+                  onClick={handleNextMonth}
+                >
+                  →
+                </View>
+              </View>
+
+              {reportStats.doneCount === 0 &&
+              reportStats.exchangeCost === 0 &&
+              reportStats.photoCount === 0 ? (
+                <EmptyState icon="📊" title="本月暂无记录" />
+              ) : (
+                <View>
+                  <View className={styles.reportStatsGrid}>
+                    <View className={styles.reportStatsCard}>
+                      <View className={styles.reportStatsIcon}>✅</View>
+                      <View className={styles.reportStatsNum}>
+                        {reportStats.doneCount}
+                      </View>
+                      <View className={styles.reportStatsLabel}>
+                        完成任务数
+                      </View>
+                    </View>
+                    <View className={styles.reportStatsCard}>
+                      <View className={styles.reportStatsIcon}>💰</View>
+                      <View className={styles.reportStatsNum}>
+                        {reportStats.basePoints}
+                      </View>
+                      <View className={styles.reportStatsLabel}>
+                        基础分合计
+                      </View>
+                    </View>
+                    <View className={styles.reportStatsCard}>
+                      <View className={styles.reportStatsIcon}>🎁</View>
+                      <View className={styles.reportStatsNum}>
+                        {reportStats.bonusPoints}
+                      </View>
+                      <View className={styles.reportStatsLabel}>
+                        连续奖励合计
+                      </View>
+                    </View>
+                    <View className={styles.reportStatsCard}>
+                      <View className={styles.reportStatsIcon}>🛍️</View>
+                      <View className={styles.reportStatsNum}>
+                        {reportStats.exchangeCost}
+                      </View>
+                      <View className={styles.reportStatsLabel}>
+                        兑换消耗
+                      </View>
+                    </View>
+                    <View className={styles.reportStatsCard}>
+                      <View className={styles.reportStatsIcon}>📷</View>
+                      <View className={styles.reportStatsNum}>
+                        {reportStats.photoCount}
+                      </View>
+                      <View className={styles.reportStatsLabel}>
+                        成长照片
+                      </View>
+                    </View>
+                    <View className={styles.reportStatsCard}>
+                      <View className={styles.reportStatsIcon}>📈</View>
+                      <View
+                        className={styles.reportStatsNum}
+                        style={{
+                          color:
+                            reportStats.netGrowth >= 0
+                              ? '#00B894'
+                              : '#FF6B6B'
+                        }}
+                      >
+                        {reportStats.netGrowth >= 0 ? '+' : ''}
+                        {reportStats.netGrowth}
+                      </View>
+                      <View className={styles.reportStatsLabel}>
+                        净增长
+                      </View>
+                    </View>
+                  </View>
+
+                  {reportStats.doneTasks.length > 0 && (
+                    <View>
+                      <View className={styles.reportSectionTitle}>
+                        📋 任务完成清单
+                      </View>
+                      {reportStats.doneTasks
+                        .sort(
+                          (a, b) =>
+                            new Date(
+                              b.perMemberStatus?.[selectedMemberId]
+                                ?.checkedAt || b.createdAt
+                            ).getTime() -
+                            new Date(
+                              a.perMemberStatus?.[selectedMemberId]
+                                ?.checkedAt || a.createdAt
+                            ).getTime()
+                        )
+                        .map((task) => {
+                          const ms =
+                            task.perMemberStatus?.[selectedMemberId]
+                          return (
+                            <View
+                              key={task.id}
+                              className={styles.reportTaskItem}
+                              onClick={() => goTaskDetail(task.id)}
+                            >
+                              <View
+                                className={styles.taskTypeIcon}
+                                style={{
+                                  background:
+                                    taskTypeConfig[task.type].bgColor
+                                }}
+                              >
+                                {taskTypeEmoji[task.type] || '📌'}
+                              </View>
+                              <View className={styles.taskContent}>
+                                <Text className={styles.taskTitle}>
+                                  {task.title}
+                                </Text>
+                                <View className={styles.taskMeta}>
+                                  <Text className={styles.taskPoints}>
+                                    +{ms?.earnedPoints || task.points}
+                                  </Text>
+                                  {ms?.bonusTriggered &&
+                                    ms.bonusPoints &&
+                                    ms.bonusPoints > 0 && (
+                                      <Text
+                                        className={styles.taskBonusPoints}
+                                      >
+                                        🎁 +{ms.bonusPoints}
+                                      </Text>
+                                    )}
+                                  <Text className={styles.taskTime}>
+                                    {formatDate(
+                                      ms?.checkedAt || task.createdAt,
+                                      'MM-DD HH:mm'
+                                    )}
+                                  </Text>
+                                </View>
+                              </View>
+                            </View>
+                          )
+                        })}
+                    </View>
+                  )}
+
+                  {reportStats.monthExchanges.length > 0 && (
+                    <View>
+                      <View className={styles.reportSectionTitle}>
+                        🛍️ 兑换消耗清单
+                      </View>
+                      {reportStats.monthExchanges
+                        .sort(
+                          (a, b) =>
+                            new Date(b.createdAt).getTime() -
+                            new Date(a.createdAt).getTime()
+                        )
+                        .map((exchange) => (
+                          <View
+                            key={exchange.id}
+                            className={styles.reportExchangeItem}
+                            onClick={() => goRewardDetail(exchange.rewardId)}
+                          >
+                            <View className={styles.reportExchangeImage}>
+                              <Image
+                                src={exchange.rewardImage}
+                                mode="aspectFill"
+                              />
+                            </View>
+                            <View className={styles.exchangeInfo}>
+                              <Text className={styles.exchangeName}>
+                                {exchange.rewardName}
+                              </Text>
+                              <View className={styles.exchangeMeta}>
+                                <View
+                                  className={classnames(
+                                    styles.exchangeStatusBadge,
+                                    exchange.status
+                                  )}
+                                >
+                                  {getExchangeStatusLabel(
+                                    exchange.status
+                                  )}
+                                </View>
+                                <Text>
+                                  {formatDate(
+                                    exchange.createdAt,
+                                    'MM-DD HH:mm'
+                                  )}
+                                </Text>
+                              </View>
+                            </View>
+                            <View className={styles.exchangePoints}>
+                              -{exchange.points}
+                            </View>
+                          </View>
+                        ))}
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
+          )}
+
           {activeTab === 'task' && (
             <View>
               {memberTasks.length === 0 ? (

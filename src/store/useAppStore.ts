@@ -31,6 +31,10 @@ export interface PerMemberTaskState {
   checkedBy?: string
   remark?: string
   submittedAt?: string
+  earnedPoints?: number
+  bonusPoints?: number
+  streakDays?: number
+  bonusTriggered?: boolean
 }
 
 export interface CurrentRuleSettings {
@@ -231,10 +235,9 @@ export const useAppStore = create<AppState>((set, get) => ({
           if (status === 'done' && oldState.status !== 'done') {
             const member = state.familyMembers.find((m) => m.id === memberId)
             if (member && member.role === 'child') {
-              const bonusPoints =
-                member.streak > 0 && (member.streak + 1) % t.bonusDays === 0
-                  ? t.bonusPoints
-                  : 0
+              const newStreak = member.streak + 1
+              const bonusTriggered = newStreak > 0 && newStreak % t.bonusDays === 0
+              const bonusPoints = bonusTriggered ? t.bonusPoints : 0
               const totalPoints = t.points + bonusPoints
 
               newRecords.push({
@@ -243,29 +246,39 @@ export const useAppStore = create<AppState>((set, get) => ({
                 type: 'earn',
                 amount: t.points,
                 balance: member.points + totalPoints,
-                description: `完成${t.title}`,
+                description: `${member.name}完成${t.title}`,
                 sourceId: t.id,
                 sourceType: 'task',
                 createdAt: new Date().toISOString(),
                 operatorId: state.currentMemberId
               })
 
-              if (bonusPoints > 0) {
+              if (bonusTriggered && bonusPoints > 0) {
                 newRecords.push({
                   id: generateId(),
                   memberId,
                   type: 'bonus',
                   amount: bonusPoints,
                   balance: member.points + totalPoints,
-                  description: `连续打卡${member.streak + 1}天奖励`,
+                  description: `${member.name}连续打卡${newStreak}天完成${t.title}奖励`,
+                  sourceId: t.id,
                   sourceType: 'bonus',
-                  createdAt: new Date().toISOString()
+                  createdAt: new Date().toISOString(),
+                  operatorId: state.currentMemberId
                 })
+              }
+
+              perMember[memberId] = {
+                ...perMember[memberId],
+                earnedPoints: t.points,
+                bonusPoints,
+                streakDays: newStreak,
+                bonusTriggered
               }
 
               updatedMembers = updatedMembers.map((m) =>
                 m.id === memberId
-                  ? { ...m, points: m.points + totalPoints, streak: m.streak + 1 }
+                  ? { ...m, points: m.points + totalPoints, streak: newStreak }
                   : m
               )
             }
@@ -305,10 +318,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         const newRecords: PointRecord[] = []
         const updatedMembers = state.familyMembers.map((m) => {
           if (task.assignedTo.includes(m.id) && m.role === 'child') {
-            const bonusPoints =
-              m.streak > 0 && (m.streak + 1) % task.bonusDays === 0
-                ? task.bonusPoints
-                : 0
+            const newStreak = m.streak + 1
+            const bonusTriggered = newStreak > 0 && newStreak % task.bonusDays === 0
+            const bonusPoints = bonusTriggered ? task.bonusPoints : 0
             const totalPoints = task.points + bonusPoints
 
             newRecords.push({
@@ -317,30 +329,32 @@ export const useAppStore = create<AppState>((set, get) => ({
               type: 'earn',
               amount: task.points,
               balance: m.points + totalPoints,
-              description: `完成${task.title}`,
+              description: `${m.name}完成${task.title}`,
               sourceId: task.id,
               sourceType: 'task',
               createdAt: new Date().toISOString(),
               operatorId: state.currentMemberId
             })
 
-            if (bonusPoints > 0) {
+            if (bonusTriggered && bonusPoints > 0) {
               newRecords.push({
                 id: generateId(),
                 memberId: m.id,
                 type: 'bonus',
                 amount: bonusPoints,
                 balance: m.points + totalPoints,
-                description: `连续打卡${m.streak + 1}天奖励`,
+                description: `${m.name}连续打卡${newStreak}天完成${task.title}奖励`,
+                sourceId: task.id,
                 sourceType: 'bonus',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                operatorId: state.currentMemberId
               })
             }
 
             return {
               ...m,
               points: m.points + totalPoints,
-              streak: m.streak + 1
+              streak: newStreak
             }
           }
           return m
@@ -348,11 +362,18 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         const perMemberStatus: Record<string, PerMemberTaskState> = {}
         task.assignedTo.forEach((mid) => {
+          const mem = state.familyMembers.find((m) => m.id === mid)
+          const ns = mem ? mem.streak + 1 : 0
+          const bt = ns > 0 && ns % task.bonusDays === 0
           perMemberStatus[mid] = {
             status,
             remark,
             checkedAt: new Date().toISOString(),
-            checkedBy: state.currentMemberId
+            checkedBy: state.currentMemberId,
+            earnedPoints: task.points,
+            bonusPoints: bt ? task.bonusPoints : 0,
+            streakDays: ns,
+            bonusTriggered: bt
           }
         })
 
