@@ -160,16 +160,21 @@ const TaskPublishPage: React.FC = () => {
                   +
                 </Button>
               </View>
-              <View className={styles.quickPoints}>
-                {[5, 10, 15, 20].map((v) => (
-                  <View
-                    key={v}
-                    className={classnames(styles.quickPoint, points === v && styles.active)}
-                    onClick={() => setPoints(v)}
-                  >
-                    {v}分
-                  </View>
-                ))}
+              <View style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <View className={styles.quickPoints}>
+                  {[5, 10, 15, 20].map((v) => (
+                    <View
+                      key={v}
+                      className={classnames(styles.quickPoint, points === v && styles.active)}
+                      onClick={() => setPoints(v)}
+                    >
+                      {v}分
+                    </View>
+                  ))}
+                </View>
+                <Text style={{ fontSize: '11px', color: '#999', paddingLeft: '4px' }}>
+                  ✨ 规则建议 {getDefaultPointsForType(type)}分
+                </Text>
               </View>
             </View>
           </View>
@@ -213,6 +218,45 @@ const TaskPublishPage: React.FC = () => {
                   </Button>
                 </View>
               </View>
+            </View>
+          </View>
+
+          <View className={styles.formItem}>
+            <View className={styles.formLabel}>📊 奖励预览表</View>
+            <View style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
+              {[3, 7, 14, 30, 100].map((D) => {
+                const remainder = D % bonusDays
+                const isMultiple = remainder === 0
+                const multiplier = D / bonusDays
+                const daysToNext = bonusDays - (remainder || bonusDays)
+                const nextMilestone = D + daysToNext
+                const nextMultiplier = Math.ceil(D / bonusDays)
+
+                return (
+                  <View
+                    key={D}
+                    style={{
+                      background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                      borderRadius: '10px',
+                      padding: '12px 14px',
+                      border: '1px solid #e2e8f0'
+                    }}
+                  >
+                    <Text style={{ fontSize: '12px', color: '#64748b', display: 'block', marginBottom: '8px' }}>
+                      节点 {D}天
+                    </Text>
+                    {isMultiple ? (
+                      <Text style={{ fontSize: '13px', color: '#00B894', fontWeight: 600 }}>
+                        满{D}天：+{bonusPoints} × {multiplier}分
+                      </Text>
+                    ) : (
+                      <Text style={{ fontSize: '12px', color: '#54A0FF' }}>
+                        再{daysToNext}天，满{nextMilestone}天 +{bonusPoints} × {nextMultiplier}分
+                      </Text>
+                    )}
+                  </View>
+                )
+              })}
             </View>
           </View>
         </View>

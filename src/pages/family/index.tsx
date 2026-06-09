@@ -142,6 +142,10 @@ const FamilyPage: React.FC = () => {
     Taro.navigateTo({ url: '/pages/points-detail/index' })
   }
 
+  const goChildProfile = (memberId: string) => {
+    Taro.navigateTo({ url: `/pages/child-profile/index?memberId=${memberId}` })
+  }
+
   const openAddModal = () => {
     setNewMemberName('')
     setNewMemberAvatar('')
@@ -287,9 +291,9 @@ const FamilyPage: React.FC = () => {
                 </Button>
                 <Button
                   className={classnames(styles.actionBtn, styles.detail)}
-                  onClick={() => goDetail(member.id)}
+                  onClick={() => goChildProfile(member.id)}
                 >
-                  详情
+                  📁 成长档案
                 </Button>
               </View>
             </View>

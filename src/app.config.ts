@@ -13,6 +13,7 @@ export default defineAppConfig({
     'pages/album/index',
     'pages/calendar/index',
     'pages/family/index',
+    'pages/child-profile/index',
     'pages/rules/index',
     'pages/promise/index'
   ],

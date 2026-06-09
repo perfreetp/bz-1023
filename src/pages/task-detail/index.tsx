@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { View, Text, Image, Button, Textarea } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import classnames from 'classnames'
@@ -24,12 +24,12 @@ const TaskDetailPage: React.FC = () => {
     currentRole,
     currentMemberId,
     submitTaskPhoto,
-    updateTaskStatus
+    updateTaskMemberStatus
   } = useAppStore()
 
   const task = tasks.find((t) => t.id === taskId)
-  const [remark, setRemark] = useState('')
-  const [uploading, setUploading] = useState(false)
+  const [memberRemarks, setMemberRemarks] = useState<Record<string, string>>({})
+  const [uploadingMemberId, setUploadingMemberId] = useState<string | null>(null)
 
   if (!task) {
     return (
@@ -42,120 +42,100 @@ const TaskDetailPage: React.FC = () => {
   }
 
   const typeConfig = taskTypeConfig[task.type] || taskTypeConfig.other
-  const statusConfig = taskStatusConfig[task.status]
   const typeIcon = taskTypeIconMap[task.type] || '✨'
 
   const assignedMembers = familyMembers.filter((m) => task.assignedTo.includes(m.id))
   const isParent = currentRole === 'parent'
   const isChild = currentRole === 'child'
-  const isMyTask = task.assignedTo.includes(currentMemberId)
 
-  const checkedByMember = task.checkedBy
-    ? familyMembers.find((m) => m.id === task.checkedBy)
-    : null
+  const aggregatedStatus = useMemo(() => {
+    const perMember = task.perMemberStatus || {}
+    const statuses = task.assignedTo.map(
+      (mid) => perMember[mid]?.status || 'pending'
+    )
+    if (statuses.every((s) => s === 'done')) return 'done'
+    if (statuses.some((s) => s === 'checking')) return 'checking'
+    if (statuses.every((s) => s === 'rejected')) return 'rejected'
+    return 'pending'
+  }, [task.perMemberStatus, task.assignedTo])
 
-  const handleUploadPhoto = () => {
-    if (uploading) return
-    setUploading(true)
+  const aggregatedStatusConfig = taskStatusConfig[aggregatedStatus]
+
+  const getMemberStatus = (memberId: string) => {
+    return task.perMemberStatus?.[memberId] || { status: 'pending' as const }
+  }
+
+  const handleUploadPhoto = (memberId: string) => {
+    if (uploadingMemberId) return
+    setUploadingMemberId(memberId)
     Taro.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
       success: (res) => {
         const tempFilePath = res.tempFilePaths[0]
-        submitTaskPhoto(task.id, tempFilePath)
+        submitTaskPhoto(task.id, memberId, tempFilePath)
         Taro.showToast({ title: '打卡成功，等待审核', icon: 'success' })
       },
       fail: () => {
         Taro.showToast({ title: '已取消', icon: 'none' })
       },
       complete: () => {
-        setUploading(false)
+        setUploadingMemberId(null)
       }
     })
   }
 
-  const handleApprove = () => {
-    updateTaskStatus(task.id, 'done', remark.trim() || undefined)
+  const handleApprove = (memberId: string) => {
+    const remark = memberRemarks[memberId]?.trim() || undefined
+    updateTaskMemberStatus(task.id, memberId, 'done', remark)
     Taro.showToast({ title: '已通过', icon: 'success' })
+    setMemberRemarks((prev) => ({ ...prev, [memberId]: '' }))
   }
 
-  const handleReject = () => {
-    if (!remark.trim()) {
+  const handleReject = (memberId: string) => {
+    const remark = memberRemarks[memberId]?.trim()
+    if (!remark) {
       Taro.showToast({ title: '请填写驳回理由', icon: 'none' })
       return
     }
-    updateTaskStatus(task.id, 'rejected', remark.trim())
+    updateTaskMemberStatus(task.id, memberId, 'rejected', remark)
     Taro.showToast({ title: '已驳回', icon: 'none' })
+    setMemberRemarks((prev) => ({ ...prev, [memberId]: '' }))
   }
 
-  const showChildUpload = isChild && isMyTask && task.status === 'pending'
-  const showParentReview = isParent && task.status === 'checking'
+  const currentMember = familyMembers.find((m) => m.id === currentMemberId)
+  const isCurrentMemberAssigned = task.assignedTo.includes(currentMemberId)
+  const currentMemberState = isCurrentMemberAssigned ? getMemberStatus(currentMemberId) : null
+  const showCurrentChildUploadAtBottom =
+    isChild &&
+    isCurrentMemberAssigned &&
+    currentMemberState &&
+    (currentMemberState.status === 'pending' || currentMemberState.status === 'rejected')
 
   const renderActionBar = () => {
-    if (isParent) {
-      if (task.status === 'checking') {
-        return (
-          <View className={styles.actionBar}>
-            <Button className={styles.secondaryBtn} onClick={handleReject}>
-              ✋ 驳回
-            </Button>
-            <Button className={styles.primaryBtn} onClick={handleApprove}>
-              ✅ 通过
-            </Button>
-          </View>
-        )
-      }
+    if (showCurrentChildUploadAtBottom) {
       return (
         <View className={styles.actionBar}>
           <Button
             className={styles.fullWidthBtn}
-            onClick={() => Taro.navigateBack()}
+            onClick={() => handleUploadPhoto(currentMemberId)}
           >
-            ← 返回列表
+            📸 {currentMemberState?.status === 'rejected' ? '重新打卡' : '立即打卡'}
           </Button>
         </View>
       )
     }
-
-    if (isChild) {
-      if (task.status === 'pending' && isMyTask) {
-        return (
-          <View className={styles.actionBar}>
-            <Button
-              className={styles.fullWidthBtn}
-              onClick={handleUploadPhoto}
-            >
-              📸 立即打卡
-            </Button>
-          </View>
-        )
-      }
-      if (task.status === 'rejected' && isMyTask) {
-        return (
-          <View className={styles.actionBar}>
-            <Button
-              className={styles.fullWidthBtn}
-              onClick={handleUploadPhoto}
-            >
-              📸 重新打卡
-            </Button>
-          </View>
-        )
-      }
-      return (
-        <View className={styles.actionBar}>
-          <Button
-            className={styles.fullWidthBtn}
-            onClick={() => Taro.navigateBack()}
-          >
-            ← 返回列表
-          </Button>
-        </View>
-      )
-    }
-
-    return null
+    return (
+      <View className={styles.actionBar}>
+        <Button
+          className={styles.fullWidthBtn}
+          onClick={() => Taro.navigateBack()}
+        >
+          ← 返回列表
+        </Button>
+      </View>
+    )
   }
 
   return (
@@ -172,30 +152,15 @@ const TaskDetailPage: React.FC = () => {
             </View>
             <View
               className={styles.statusBadge}
-              style={{ background: `${statusConfig.color}15`, color: statusConfig.color }}
+              style={{ background: `${aggregatedStatusConfig.color}15`, color: aggregatedStatusConfig.color }}
             >
-              {statusConfig.label}
+              {aggregatedStatusConfig.label}
             </View>
           </View>
 
           <View className={styles.taskTitle}>{task.title}</View>
           {task.description && (
             <View className={styles.taskDesc}>{task.description}</View>
-          )}
-
-          {task.status === 'rejected' && task.remark && (
-            <View className={styles.remarkBox}>
-              <View className={styles.remarkLabel}>驳回原因</View>
-              <View className={styles.remarkText}>{task.remark}</View>
-            </View>
-          )}
-
-          {task.status === 'done' && checkedByMember && (
-            <View className={styles.approvedInfo}>
-              <Text className={styles.approvedText}>
-                ✅ {checkedByMember.name} 于 {formatDateTime(task.checkedAt!)} 审核通过
-              </Text>
-            </View>
           )}
         </View>
 
@@ -234,80 +199,121 @@ const TaskDetailPage: React.FC = () => {
           </View>
         </View>
 
-        <View className={styles.card}>
-          <View className={styles.formTitle}>👤 执行人</View>
-          <View className={styles.memberList}>
-            {assignedMembers.map((m) => (
-              <View key={m.id} className={styles.memberItem}>
-                <Image
-                  className={styles.memberAvatar}
-                  src={m.avatar}
-                  mode="aspectFill"
-                />
-                <View className={styles.memberInfo}>
-                  <Text className={styles.memberName}>{m.name}</Text>
-                  <Text className={styles.memberStreak}>🔥 连续打卡 {m.streak} 天</Text>
-                </View>
-              </View>
-            ))}
-          </View>
+        <View className={styles.formTitle} style={{ marginTop: 0, marginBottom: 24 }}>
+          👤 孩子打卡状态
         </View>
 
-        <View className={styles.photoSection}>
-          <View className={styles.formTitle}>📸 打卡照片</View>
+        {assignedMembers.map((member) => {
+          const memberState = getMemberStatus(member.id)
+          const statusConfig = taskStatusConfig[memberState.status]
+          const isCurrentMember = member.id === currentMemberId
+          const showChildUpload =
+            isChild && isCurrentMember &&
+            (memberState.status === 'pending' || memberState.status === 'rejected')
+          const showParentReview = isParent && memberState.status === 'checking'
+          const checkedByMember = memberState.checkedBy
+            ? familyMembers.find((m) => m.id === memberState.checkedBy)
+            : null
 
-          {task.photo ? (
-            <View>
-              <Image
-                className={styles.photoImage}
-                src={task.photo}
-                mode="aspectFill"
-                onClick={() => {
-                  Taro.previewImage({
-                    urls: [task.photo!],
-                    current: task.photo
-                  })
-                }}
-              />
-              {task.status === 'checking' && (
-                <View className={styles.photoTime}>
-                  打卡时间：{formatDateTime(task.createdAt)}
+          return (
+            <View key={member.id} className={styles.card}>
+              <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+                <View style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <Image
+                    src={member.avatar}
+                    mode="aspectFill"
+                    style={{ width: 96, height: 96, borderRadius: 48, flexShrink: 0 }}
+                  />
+                  <View style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <Text style={{ fontSize: 30, fontWeight: 600, color: '#1a1a2e' }}>
+                      {member.name}
+                    </Text>
+                    <Text style={{ fontSize: 22, color: '#FF9F43', fontWeight: 600 }}>
+                      🔥 连续打卡 {member.streak} 天
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  className={styles.statusBadge}
+                  style={{ background: `${statusConfig.color}15`, color: statusConfig.color, marginLeft: 0 }}
+                >
+                  {statusConfig.label}
+                </View>
+              </View>
+
+              {memberState.status === 'rejected' && memberState.remark && (
+                <View className={styles.remarkBox}>
+                  <View className={styles.remarkLabel}>驳回原因</View>
+                  <View className={styles.remarkText}>{memberState.remark}</View>
+                </View>
+              )}
+
+              {memberState.status === 'done' && checkedByMember && memberState.checkedAt && (
+                <View className={styles.approvedInfo}>
+                  <Text className={styles.approvedText}>
+                    ✅ {checkedByMember.name} 于 {formatDateTime(memberState.checkedAt)} 审核通过
+                  </Text>
+                </View>
+              )}
+
+              {memberState.photo ? (
+                <View style={{ marginTop: 16 }}>
+                  <Image
+                    className={styles.photoImage}
+                    src={memberState.photo}
+                    mode="aspectFill"
+                    onClick={() => {
+                      Taro.previewImage({
+                        urls: [memberState.photo!],
+                        current: memberState.photo
+                      })
+                    }}
+                  />
+                  {memberState.submittedAt && (
+                    <View className={styles.photoTime}>
+                      打卡时间：{formatDateTime(memberState.submittedAt)}
+                    </View>
+                  )}
+                </View>
+              ) : null}
+
+              {showChildUpload && (
+                <View style={{ marginTop: 16 }}>
+                  <Button
+                    className={styles.uploadBtn}
+                    onClick={() => handleUploadPhoto(member.id)}
+                  >
+                    <Text className={styles.uploadIcon}>📷</Text>
+                    <Text>
+                      {memberState.status === 'rejected' ? '重新上传打卡照片' : '点击上传打卡照片'}
+                    </Text>
+                  </Button>
+                </View>
+              )}
+
+              {showParentReview && (
+                <View className={styles.reviewSection} style={{ marginTop: 16, padding: 0, boxShadow: 'none', marginBottom: 0, background: 'transparent' }}>
+                  <View className={styles.formTitle}>✅ 家长审核</View>
+                  <Textarea
+                    className={styles.reviewTextarea}
+                    placeholder="填写审核评论（驳回必填，通过可选）"
+                    value={memberRemarks[member.id] || ''}
+                    onInput={(e) => setMemberRemarks((prev) => ({ ...prev, [member.id]: e.detail.value }))}
+                    maxlength={200}
+                  />
+                  <View className={styles.reviewBtns}>
+                    <Button className={styles.rejectBtn} onClick={() => handleReject(member.id)}>
+                      ✋ 驳回
+                    </Button>
+                    <Button className={styles.approveBtn} onClick={() => handleApprove(member.id)}>
+                      ✅ 通过 +{task.points}分
+                    </Button>
+                  </View>
                 </View>
               )}
             </View>
-          ) : showChildUpload ? (
-            <Button className={styles.uploadBtn} onClick={handleUploadPhoto}>
-              <Text className={styles.uploadIcon}>📷</Text>
-              <Text>点击上传打卡照片</Text>
-            </Button>
-          ) : (
-            <View className={styles.emptyPhoto}>
-              <Text className={styles.emptyPhotoIcon}>🖼️</Text>
-              <Text>暂无打卡照片</Text>
-            </View>
-          )}
-        </View>
-
-        {showParentReview && (
-          <View className={styles.reviewSection}>
-            <View className={styles.formTitle}>✅ 家长审核</View>
-            <Textarea
-              className={styles.reviewTextarea}
-              placeholder="填写审核评论（驳回必填，通过可选）"
-              value={remark}
-              onInput={(e) => setRemark(e.detail.value)}
-              maxlength={200}
-            />
-            <View className={styles.reviewBtns}>
-              <Button className={styles.rejectBtn} onClick={handleReject}>
-                ✋ 驳回
-              </Button>
-              <Button className={styles.approveBtn} onClick={handleApprove}>
-                ✅ 通过
-              </Button>
-            </View>
-          </View>
-        )}
+          )
+        })}
       </View>
 
       {renderActionBar()}
