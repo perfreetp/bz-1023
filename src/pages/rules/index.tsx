@@ -16,6 +16,7 @@ interface RulesForm {
   homeworkPoints: number
   exercisePoints: number
   tidyingPoints: number
+  otherPoints: number
   bonusDays: number
   bonusMultiplier: number
 }
@@ -31,6 +32,7 @@ const ruleConfig: { key: keyof RulesForm; label: string; step: number; min: numb
   { key: 'homeworkPoints', label: '作业基础分', step: 1, min: 0 },
   { key: 'exercisePoints', label: '运动基础分', step: 1, min: 0 },
   { key: 'tidyingPoints', label: '整理基础分', step: 1, min: 0 },
+  { key: 'otherPoints', label: '其他任务分', step: 1, min: 0 },
   { key: 'bonusDays', label: '连续打卡周期(天)', step: 1, min: 1 },
   { key: 'bonusMultiplier', label: '连续奖励倍数', step: 1, min: 1 }
 ]
@@ -55,21 +57,21 @@ const RulesPage: React.FC = () => {
     addBlacklistWord,
     removeBlacklistWord,
     adjustPoints,
-    familyMembers
+    familyMembers,
+    currentRule,
+    saveCurrentRule
   } = useAppStore()
 
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(ruleTemplates[0]?.id || '')
-  const [rules, setRules] = useState<RulesForm>(() => {
-    const tpl = ruleTemplates[0]
-    return {
-      readingPoints: (tpl?.content.find((c) => c.key === 'readingPoints')?.value as number) ?? 10,
-      homeworkPoints: (tpl?.content.find((c) => c.key === 'homeworkPoints')?.value as number) ?? 15,
-      exercisePoints: (tpl?.content.find((c) => c.key === 'exercisePoints')?.value as number) ?? 12,
-      tidyingPoints: (tpl?.content.find((c) => c.key === 'tidyingPoints')?.value as number) ?? 8,
-      bonusDays: (tpl?.content.find((c) => c.key === 'bonusDays')?.value as number) ?? 7,
-      bonusMultiplier: (tpl?.content.find((c) => c.key === 'bonusMultiplier')?.value as number) ?? 3
-    }
-  })
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('')
+  const [rules, setRules] = useState<RulesForm>(() => ({
+    readingPoints: currentRule.readingPoints,
+    homeworkPoints: currentRule.homeworkPoints,
+    exercisePoints: currentRule.exercisePoints,
+    tidyingPoints: currentRule.tidyingPoints,
+    otherPoints: currentRule.otherPoints,
+    bonusDays: currentRule.bonusDays,
+    bonusMultiplier: currentRule.bonusMultiplier
+  }))
   const [newWord, setNewWord] = useState('')
   const [showMemberModal, setShowMemberModal] = useState(false)
   const [pendingAdjust, setPendingAdjust] = useState<PendingAdjust | null>(null)
@@ -90,7 +92,11 @@ const RulesPage: React.FC = () => {
         ;(newRules as Record<string, number>)[item.key] = item.value as number
       }
     })
+    if (!(('otherPoints' as keyof RulesForm) in newRules)) {
+      newRules.otherPoints = 10
+    }
     setRules(newRules)
+    saveCurrentRule(newRules)
     Taro.showToast({ title: `已应用${tpl.name}`, icon: 'success' })
   }
 
@@ -145,6 +151,7 @@ const RulesPage: React.FC = () => {
   }
 
   const handleSave = () => {
+    saveCurrentRule(rules)
     Taro.showToast({ title: '规则已保存', icon: 'success' })
   }
 

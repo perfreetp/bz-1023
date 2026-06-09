@@ -26,7 +26,8 @@ const FamilyPage: React.FC = () => {
     adjustPoints,
     setCurrentMember,
     currentRole,
-    switchRole
+    switchRole,
+    addFamilyMember
   } = useAppStore()
 
   const [showAdjustModal, setShowAdjustModal] = useState(false)
@@ -168,9 +169,25 @@ const FamilyPage: React.FC = () => {
       Taro.showToast({ title: '请输入姓名', icon: 'none' })
       return
     }
+    let finalAvatar = newMemberAvatar
+    if (!finalAvatar) {
+      const idPool = [1, 12, 34, 56, 78, 91, 202, 311, 421, 532, 645, 823, 903, 999]
+      const randomId = idPool[Math.floor(Math.random() * idPool.length)]
+      finalAvatar = `https://picsum.photos/id/${randomId}/200/200`
+    }
+    const idx = Math.max(0, familyMembers.length % colorPool.length)
+    const color = colorPool[idx]
+
+    addFamilyMember({
+      name: newMemberName.trim(),
+      avatar: finalAvatar,
+      role: newMemberRole,
+      color
+    })
+
     Taro.showToast({
-      title: '功能开发中',
-      icon: 'none'
+      title: '添加成功',
+      icon: 'success'
     })
     closeAddModal()
   }

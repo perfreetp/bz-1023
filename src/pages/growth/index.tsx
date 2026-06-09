@@ -82,7 +82,7 @@ const GrowthPage: React.FC = () => {
           <View className={styles.statLabel}>个里程碑</View>
         </View>
         <View className={styles.statBox}>
-          <View className={styles.statNum} style={{ color: $color-primary }}>
+          <View className={styles.statNum} style={{ color: '#FF6B8A' }}>
             {stats.photos}
           </View>
           <View className={styles.statLabel}>张照片</View>

@@ -18,18 +18,38 @@ const taskTypeOptions: { key: TaskType; icon: string; label: string }[] = [
 const reminderOptions = ['08:00', '12:00', '17:00', '18:30', '19:00', '20:00', '无提醒']
 
 const TaskPublishPage: React.FC = () => {
-  const { familyMembers, addTask, blacklistWords } = useAppStore()
+  const { familyMembers, addTask, blacklistWords, currentRule } = useAppStore()
+
+  const getDefaultPointsForType = (t: TaskType) => {
+    const map: Record<TaskType, number> = {
+      reading: currentRule.readingPoints,
+      homework: currentRule.homeworkPoints,
+      exercise: currentRule.exercisePoints,
+      tidying: currentRule.tidyingPoints,
+      other: currentRule.otherPoints
+    }
+    return map[t]
+  }
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [type, setType] = useState<TaskType>('reading')
-  const [points, setPoints] = useState(10)
-  const [bonusDays, setBonusDays] = useState(7)
-  const [bonusPoints, setBonusPoints] = useState(30)
+  const [points, setPoints] = useState(getDefaultPointsForType('reading'))
+  const [bonusDays, setBonusDays] = useState(currentRule.bonusDays)
+  const [bonusPoints, setBonusPoints] = useState(
+    getDefaultPointsForType('reading') * currentRule.bonusMultiplier
+  )
   const [reminder, setReminder] = useState('19:00')
   const [assignedTo, setAssignedTo] = useState<string[]>([])
 
   const childMembers = familyMembers.filter((m) => m.role === 'child')
+
+  const handleTypeChange = (t: TaskType) => {
+    setType(t)
+    const pts = getDefaultPointsForType(t)
+    setPoints(pts)
+    setBonusPoints(pts * currentRule.bonusMultiplier)
+  }
 
   const wordAlert = useMemo(() => {
     const text = `${title} ${description}`
@@ -82,7 +102,7 @@ const TaskPublishPage: React.FC = () => {
                 <View
                   key={opt.key}
                   className={classnames(styles.typeItem, type === opt.key && styles.active)}
-                  onClick={() => setType(opt.key)}
+                  onClick={() => handleTypeChange(opt.key)}
                 >
                   <Text className={styles.typeIcon}>{opt.icon}</Text>
                   <Text className={styles.typeName}>{opt.label}</Text>

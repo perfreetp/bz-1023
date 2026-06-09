@@ -23,7 +23,7 @@ const HomePage: React.FC = () => {
     currentRole,
     switchRole,
     submitTaskPhoto,
-    updateTaskStatus
+    updateTaskMemberStatus
   } = useAppStore()
 
   const [filter, setFilter] = useState('all')
@@ -32,30 +32,53 @@ const HomePage: React.FC = () => {
   const childMembers = familyMembers.filter((m) => m.role === 'child')
   const currentMember = familyMembers.find((m) => m.id === currentMemberId) || childMembers[0]
 
+  const getMemberTaskStatus = (task: any, memberId: string) => {
+    return task.perMemberStatus?.[memberId]?.status || task.status
+  }
+
+  const getMemberTaskPhoto = (task: any, memberId: string) => {
+    return task.perMemberStatus?.[memberId]?.photo || task.photo
+  }
+
   const filteredTasks = useMemo(() => {
-    let list = tasks.filter((t) =>
+    let list = tasks.filter((t: any) =>
       currentRole === 'parent' ? true : t.assignedTo.includes(currentMemberId)
     )
     if (filter !== 'all') {
-      list = list.filter((t) => t.status === filter)
+      list = list.filter((t: any) => {
+        if (currentRole === 'parent') {
+          const memStatuses = Object.values(t.perMemberStatus || {}).map((s: any) => s.status)
+          return memStatuses.includes(filter as any)
+        } else {
+          return getMemberTaskStatus(t, currentMemberId) === filter
+        }
+      })
     }
     return list
   }, [tasks, filter, currentMemberId, currentRole])
 
   const stats = useMemo(() => {
     const todayStr = formatDate(new Date())
-    const todayTasks = tasks.filter(
-      (t) => t.createdAt === todayStr && t.assignedTo.includes(currentMemberId)
-    )
+    const todayTasks = tasks.filter((t: any) => {
+      const created = new Date(t.createdAt).toISOString().split('T')[0]
+      return (
+        (created === todayStr || t.deadline >= todayStr) &&
+        t.assignedTo.includes(currentMemberId)
+      )
+    })
     return {
       total: todayTasks.length,
-      done: todayTasks.filter((t) => t.status === 'done').length,
-      checking: tasks.filter((t) => t.status === 'checking').length
+      done: todayTasks.filter((t: any) => getMemberTaskStatus(t, currentMemberId) === 'done').length,
+      checking: todayTasks.filter((t: any) => getMemberTaskStatus(t, currentMemberId) === 'checking').length
     }
   }, [tasks, currentMemberId])
 
   const pendingReviewTasks = useMemo(
-    () => tasks.filter((t) => t.status === 'checking'),
+    () =>
+      tasks.filter((t: any) => {
+        const memStatuses = Object.values(t.perMemberStatus || {}).map((s: any) => s.status)
+        return memStatuses.includes('checking')
+      }),
     [tasks]
   )
 
@@ -68,7 +91,7 @@ const HomePage: React.FC = () => {
     try {
       const res = await Taro.chooseImage({ count: 1 })
       if (res.tempFilePaths && res.tempFilePaths[0]) {
-        submitTaskPhoto(taskId, res.tempFilePaths[0])
+        submitTaskPhoto(taskId, currentMemberId, res.tempFilePaths[0])
         Taro.showToast({ title: '已提交审核', icon: 'success' })
       }
     } catch (e) {
@@ -76,17 +99,18 @@ const HomePage: React.FC = () => {
     }
   }
 
-  const handleApprove = (taskId: string, pass: boolean) => {
+  const handleApprove = (taskId: string, memberId: string, pass: boolean) => {
+    const member = familyMembers.find((m) => m.id === memberId)
     Taro.showModal({
-      title: pass ? '通过审核' : '驳回任务',
-      content: pass ? '确认给孩子此任务的积分吗？' : '请确认要驳回此任务',
+      title: pass ? `通过 ${member?.name} 的审核` : `驳回 ${member?.name} 的任务`,
+      content: pass ? '确认给这个孩子该任务的积分吗？' : '请确认要驳回此任务',
       success: (res) => {
         if (res.confirm) {
           if (pass) {
-            updateTaskStatus(taskId, 'done', '做得很棒！')
+            updateTaskMemberStatus(taskId, memberId, 'done', '做得很棒！')
             Taro.showToast({ title: '已通过', icon: 'success' })
           } else {
-            updateTaskStatus(taskId, 'rejected', '请重新完成')
+            updateTaskMemberStatus(taskId, memberId, 'rejected', '请重新完成')
             Taro.showToast({ title: '已驳回', icon: 'none' })
           }
         }
@@ -203,10 +227,32 @@ const HomePage: React.FC = () => {
           />
         ) : (
           <View className={styles.taskList}>
-            {filteredTasks.map((task) => {
+            {filteredTasks.map((task: any) => {
               const typeConf = taskTypeConfig[task.type]
-              const statusConf = taskStatusConfig[task.status]
+              const childStatus = getMemberTaskStatus(task, currentMemberId)
+              const statusConf = taskStatusConfig[childStatus]
               const assignees = familyMembers.filter((m) => task.assignedTo.includes(m.id))
+              const memberPhoto = getMemberTaskPhoto(task, currentMemberId)
+
+              const getStatusBadgeForMember = (mid: string) => {
+                const s = task.perMemberStatus?.[mid]?.status || task.status
+                const conf = taskStatusConfig[s]
+                return (
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: conf.color,
+                      background: conf.bgColor,
+                      padding: '2rpx 12rpx',
+                      borderRadius: 16,
+                      marginLeft: 8
+                    }}
+                  >
+                    {conf.label}
+                  </Text>
+                )
+              }
+
               return (
                 <View key={task.id} className={styles.taskCard} onClick={() => goTaskDetail(task.id)}>
                   <View className={styles.taskHeader}>
@@ -217,17 +263,17 @@ const HomePage: React.FC = () => {
                       >
                         {typeConf.label}
                       </View>
-                      <Text
-                        className={styles.typeTag}
-                        style={{
-                          background: 'transparent',
-                          color: statusConf.color,
-                          marginLeft: 12,
-                          padding: 0
-                        }}
-                      >
-                        · {statusConf.label}
-                      </Text>
+                      {currentRole === 'child' && (
+                        <Text
+                          style={{
+                            fontSize: 22,
+                            color: statusConf.color,
+                            marginLeft: 12
+                          }}
+                        >
+                          · {statusConf.label}
+                        </Text>
+                      )}
                     </View>
                     <View className={styles.pointsBadge}>
                       ⭐<Text className={styles.pointsNum}>{task.points}</Text>
@@ -237,14 +283,57 @@ const HomePage: React.FC = () => {
                   <View className={styles.taskTitle}>{task.title}</View>
                   <View className={styles.taskDesc}>{task.description}</View>
 
-                  {task.photo && (
+                  {currentRole === 'child' && memberPhoto && (
                     <Image
                       className={styles.taskPhoto}
-                      src={task.photo}
+                      src={memberPhoto}
                       mode="aspectFill"
                       onClick={(e) => e.stopPropagation()}
                     />
                   )}
+
+                  {currentRole === 'parent' &&
+                    assignees
+                      .filter((a) => a.role === 'child')
+                      .map((m) => {
+                        const p = task.perMemberStatus?.[m.id]
+                        if (p?.photo) {
+                          return (
+                            <View
+                              key={`photo-${m.id}`}
+                              style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Image
+                                src={m.avatar}
+                                style={{
+                                  width: 40,
+                                  height: 40,
+                                  borderRadius: 20,
+                                  marginRight: 12
+                                }}
+                                mode="aspectFill"
+                              />
+                              <Text style={{ fontSize: 24, color: '#333', marginRight: 12 }}>
+                                {m.name}的打卡照片
+                              </Text>
+                              {getStatusBadgeForMember(m.id)}
+                              <Image
+                                className={styles.taskPhoto}
+                                src={p.photo}
+                                mode="aspectFill"
+                                style={{
+                                  width: 120,
+                                  height: 120,
+                                  borderRadius: 16,
+                                  marginLeft: 'auto'
+                                }}
+                              />
+                            </View>
+                          )
+                        }
+                        return null
+                      })}
 
                   <View className={styles.taskMeta}>
                     <View className={styles.metaItem}>
@@ -262,7 +351,7 @@ const HomePage: React.FC = () => {
                   </View>
 
                   <View className={styles.actionBtns}>
-                    {currentRole === 'child' && task.status === 'pending' && (
+                    {currentRole === 'child' && childStatus === 'pending' && (
                       <Button
                         className={classnames(styles.btn, styles.btnPrimary)}
                         onClick={(e) => {
@@ -273,7 +362,7 @@ const HomePage: React.FC = () => {
                         📷 打卡
                       </Button>
                     )}
-                    {currentRole === 'child' && task.status === 'rejected' && (
+                    {currentRole === 'child' && childStatus === 'rejected' && (
                       <Button
                         className={classnames(styles.btn, styles.btnPrimary)}
                         onClick={(e) => {
@@ -284,33 +373,79 @@ const HomePage: React.FC = () => {
                         🔄 重新打卡
                       </Button>
                     )}
-                    {currentRole === 'parent' && task.status === 'checking' && (
-                      <>
-                        <Button
-                          className={classnames(styles.btn, styles.btnDanger)}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleApprove(task.id, false)
-                          }}
-                        >
-                          驳回
-                        </Button>
-                        <Button
-                          className={classnames(styles.btn, styles.btnSuccess)}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleApprove(task.id, true)
-                          }}
-                        >
-                          ✅ 通过
-                        </Button>
-                      </>
-                    )}
-                    {task.status === 'done' && (
+                    {currentRole === 'child' && childStatus === 'checking' && (
                       <Button className={classnames(styles.btn, styles.btnSecondary)}>
-                        ✓ 已完成 +{task.points}分
+                        ⏳ 审核中
                       </Button>
                     )}
+                    {currentRole === 'parent' &&
+                      assignees
+                        .filter((a) => a.role === 'child')
+                        .map((m) => {
+                          const mStatus = getMemberTaskStatus(task, m.id)
+                          return (
+                            <View key={`btns-${m.id}`} style={{ width: '100%', marginTop: 8 }}>
+                              <Text
+                                style={{
+                                  fontSize: 22,
+                                  color: '#666',
+                                  marginBottom: 6,
+                                  display: 'block'
+                                }}
+                              >
+                                {m.name}：
+                              </Text>
+                              <View
+                                style={{
+                                  display: 'flex',
+                                  gap: 12,
+                                  flexWrap: 'wrap'
+                                }}
+                              >
+                                {mStatus === 'checking' && (
+                                  <>
+                                    <Button
+                                      className={classnames(styles.btn, styles.btnDanger)}
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleApprove(task.id, m.id, false)
+                                      }}
+                                    >
+                                      驳回
+                                    </Button>
+                                    <Button
+                                      className={classnames(styles.btn, styles.btnSuccess)}
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleApprove(task.id, m.id, true)
+                                      }}
+                                    >
+                                      ✅ 通过 +{task.points}
+                                    </Button>
+                                  </>
+                                )}
+                                {mStatus === 'pending' && (
+                                  <Button className={classnames(styles.btn, styles.btnSecondary)}>
+                                    待完成
+                                  </Button>
+                                )}
+                                {mStatus === 'rejected' && (
+                                  <Button
+                                    className={classnames(styles.btn, styles.btnDanger)}
+                                    style={{ opacity: 0.6 }}
+                                  >
+                                    已驳回
+                                  </Button>
+                                )}
+                                {mStatus === 'done' && (
+                                  <Button className={classnames(styles.btn, styles.btnSuccess)}>
+                                    ✓ 已完成 +{task.points}分
+                                  </Button>
+                                )}
+                              </View>
+                            </View>
+                          )
+                        })}
                   </View>
                 </View>
               )
