@@ -1,0 +1,197 @@
+@use '@/styles/variables.scss' as *;
+
+.memberTab {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-lg $page-padding;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 50%, $color-secondary 100%);
+  margin: 0 (-$page-padding);
+  margin-bottom: $spacing-lg;
+}
+
+.memberChip {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.2);
+  color: $color-text-white;
+  transition: all $transition-base;
+
+  &.active {
+    background: rgba(255, 255, 255, 0.95);
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.chipAvatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  margin-right: 8rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.chipName {
+  font-size: $font-size-sm;
+  margin-right: 6rpx;
+}
+
+.chipPoints {
+  font-size: $font-size-xs;
+  opacity: 0.9;
+}
+
+.section {
+  margin-top: $spacing-lg;
+}
+
+.chartCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.statItem {
+  text-align: center;
+  padding: $spacing-md $spacing-xs;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+}
+
+.statIcon {
+  font-size: 36rpx;
+  margin-bottom: 6rpx;
+}
+
+.statNum {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.statLabel {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 2rpx;
+}
+
+.filterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+  padding-bottom: $spacing-xs;
+  @include scroll-x-container;
+}
+
+.filterTab {
+  display: inline-flex;
+  align-items: center;
+  padding: 10rpx 28rpx;
+  border-radius: $radius-round;
+  background: $color-bg-soft;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.recordList {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.recordItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.recordIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.recordInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.recordDesc {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  @include text-ellipsis;
+}
+
+.recordMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.recordTypeTag {
+  font-size: 20rpx;
+  padding: 2rpx 12rpx;
+  border-radius: $radius-xs;
+  background: $color-bg-soft;
+  color: $color-text-secondary;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.recordAmount {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}

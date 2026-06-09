@@ -1,0 +1,108 @@
+@use '@/styles/variables.scss' as *;
+
+.wrapper {
+  width: 100%;
+  padding: $spacing-md 0;
+}
+
+.chart {
+  position: relative;
+  width: 100%;
+  height: 280rpx;
+  padding: 0 $spacing-sm;
+  box-sizing: border-box;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: $color-divider;
+  stroke-width: 1;
+  stroke-dasharray: 4, 4;
+}
+
+.areaEarn {
+  fill: url(#earnGradient);
+  opacity: 0.3;
+}
+
+.areaSpend {
+  fill: url(#spendGradient);
+  opacity: 0.25;
+}
+
+.lineEarn {
+  fill: none;
+  stroke: $color-primary;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lineSpend {
+  fill: none;
+  stroke: $color-secondary;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dot {
+  r: 6;
+  stroke: $color-bg-card;
+  stroke-width: 3;
+}
+
+.dotEarn {
+  fill: $color-primary;
+}
+
+.dotSpend {
+  fill: $color-secondary;
+}
+
+.xLabels {
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-sm $spacing-sm 0;
+  margin-top: 8rpx;
+}
+
+.xLabel {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  text-align: center;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-xl;
+  margin-top: $spacing-md;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.legendDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+}
+
+.earnDot {
+  background: $color-primary;
+}
+
+.spendDot {
+  background: $color-secondary;
+}

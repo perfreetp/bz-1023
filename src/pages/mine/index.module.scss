@@ -1,0 +1,265 @@
+@use '@/styles/variables.scss' as *;
+
+.profileHeader {
+  margin: 0 (-$page-padding);
+  padding: $spacing-xl $page-padding;
+  padding-top: 64rpx;
+  background: linear-gradient(135deg, #667eea 0%, $color-primary 50%, $color-primary-light 100%);
+  color: $color-text-white;
+  position: relative;
+  overflow: hidden;
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.avatarWrap {
+  position: relative;
+  margin-right: $spacing-lg;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-round;
+  border: 6rpx solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
+.roleTag {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  color: $color-primary;
+  font-size: 20rpx;
+  font-weight: $font-weight-semibold;
+  padding: 2rpx 12rpx;
+  border-radius: $radius-round;
+  border: 2rpx solid $color-bg-card;
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.profileName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  margin-bottom: 8rpx;
+  display: flex;
+  align-items: center;
+}
+
+.profileSub {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.rankBadge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 217, 61, 0.95);
+  color: #8B6914;
+  font-size: 20rpx;
+  font-weight: $font-weight-bold;
+  padding: 4rpx 14rpx;
+  border-radius: $radius-round;
+  margin-left: $spacing-sm;
+}
+
+.familySection {
+  margin-top: -40rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 2;
+  margin-bottom: $spacing-lg;
+}
+
+.familyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.familyTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.familyManage {
+  font-size: $font-size-xs;
+  color: $color-primary;
+}
+
+.familyList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.familyItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+  background: $color-bg-soft;
+}
+
+.itemAvatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-md;
+  border: 4rpx solid $color-bg-card;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4rpx;
+}
+
+.itemRole {
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  border-radius: $radius-xs;
+  margin-left: 8rpx;
+}
+
+.itemRoleParent {
+  background: rgba(84, 160, 255, 0.12);
+  color: #54A0FF;
+}
+
+.itemRoleChild {
+  background: rgba(0, 184, 148, 0.12);
+  color: #00B894;
+}
+
+.itemStats {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.itemPoints {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.pointsNum {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}
+
+.pointsLabel {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+}
+
+.menuGroup {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.menuGroupTitle {
+  padding: $spacing-md $spacing-lg 0;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: 1rpx;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  transition: all $transition-base;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.menuIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.menuContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.menuBadge {
+  background: $color-error;
+  color: $color-text-white;
+  font-size: 20rpx;
+  min-width: 36rpx;
+  height: 36rpx;
+  padding: 0 10rpx;
+  border-radius: $radius-round;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.menuArrow {
+  color: $color-text-tertiary;
+  font-size: $font-size-lg;
+}
+
+.divider {
+  height: 2rpx;
+  background: $color-divider;
+  margin: 0 $spacing-lg;
+}

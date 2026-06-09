@@ -1,0 +1,262 @@
+@use '@/styles/variables.scss' as *;
+
+.header {
+  margin: 0 (-$page-padding);
+  padding: $spacing-lg $page-padding;
+  padding-top: 48rpx;
+  background: linear-gradient(135deg, $color-accent 0%, #FFE66D 50%, $color-primary-light 100%);
+  color: #8B4513;
+  position: relative;
+  overflow: hidden;
+}
+
+.headerTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-xs;
+  color: #5D4037;
+}
+
+.headerSub {
+  font-size: $font-size-sm;
+  color: #8B6914;
+  opacity: 0.85;
+}
+
+.pointsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: $radius-round;
+  padding: $spacing-sm $spacing-lg;
+  margin-top: $spacing-lg;
+  backdrop-filter: blur(10rpx);
+}
+
+.pointsLabel {
+  font-size: $font-size-sm;
+  color: #8B6914;
+}
+
+.pointsValue {
+  display: flex;
+  align-items: baseline;
+}
+
+.pointsNum {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.pointsUnit {
+  font-size: $font-size-xs;
+  color: #8B6914;
+  margin-left: 4rpx;
+}
+
+.categoryTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin: $spacing-lg 0 $spacing-md;
+  overflow-x: auto;
+  padding-bottom: 4rpx;
+}
+
+.categoryTab {
+  padding: 12rpx 32rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  transition: all $transition-base;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-semibold;
+    box-shadow: 0 4rpx 16rpx rgba(255, 107, 138, 0.25);
+  }
+}
+
+.quickBar {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.quickItem {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.quickIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-sm;
+}
+
+.quickText {
+  display: flex;
+  flex-direction: column;
+}
+
+.quickTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.quickSub {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 2rpx;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}
+
+.rewardCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.rewardImage {
+  width: 100%;
+  height: 260rpx;
+  position: relative;
+}
+
+.soldoutMask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  z-index: 2;
+}
+
+.needApprovalBadge {
+  position: absolute;
+  top: $spacing-sm;
+  right: $spacing-sm;
+  background: rgba(84, 160, 255, 0.95);
+  color: $color-text-white;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-round;
+  z-index: 2;
+}
+
+.rewardBody {
+  padding: $spacing-md;
+}
+
+.rewardCat {
+  font-size: 20rpx;
+  color: $color-primary;
+  background: rgba(255, 107, 138, 0.1);
+  display: inline-block;
+  padding: 2rpx 12rpx;
+  border-radius: $radius-xs;
+  margin-bottom: 8rpx;
+}
+
+.rewardName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  @include text-ellipsis;
+}
+
+.rewardDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  line-height: 1.5;
+  margin-bottom: $spacing-md;
+  @include text-ellipsis-multi(2);
+  min-height: 60rpx;
+}
+
+.rewardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.priceWrap {
+  display: flex;
+  align-items: baseline;
+}
+
+.price {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+}
+
+.originalPrice {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  text-decoration: line-through;
+  margin-left: 8rpx;
+}
+
+.buyBtn {
+  @include button-reset;
+  height: 56rpx;
+  padding: 0 24rpx;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.96);
+  }
+
+  &.disabled {
+    background: $color-text-disabled;
+  }
+}
+
+.stockText {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 6rpx;
+}

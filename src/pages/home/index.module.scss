@@ -1,0 +1,362 @@
+@use '@/styles/variables.scss' as *;
+
+.header {
+  padding: $spacing-lg $page-padding;
+  padding-top: 48rpx;
+  margin: 0 (-$page-padding);
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-lg;
+}
+
+.greeting {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: 1.3;
+}
+
+.dateText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $spacing-xs;
+}
+
+.roleSwitch {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 20rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 138, 0.15);
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.statCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.08);
+}
+
+.statValue {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.streakCard {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  color: $color-text-white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4rpx 20rpx rgba(255, 107, 138, 0.25);
+}
+
+.streakInfo {
+  flex: 1;
+}
+
+.streakTitle {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-bottom: 8rpx;
+}
+
+.streakValue {
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+}
+
+.streakUnit {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-left: 4rpx;
+}
+
+.streakReward {
+  margin-top: $spacing-sm;
+  font-size: $font-size-xs;
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+}
+
+.streakIcon {
+  width: 100rpx;
+  height: 100rpx;
+  font-size: 80rpx;
+  text-align: center;
+  filter: drop-shadow(0 4rpx 12rpx rgba(0, 0, 0, 0.15));
+}
+
+.memberSelector {
+  display: flex;
+  gap: $spacing-sm;
+  margin: $spacing-md 0;
+  padding: $spacing-sm;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: $radius-lg;
+}
+
+.memberTab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-bg-card;
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  }
+}
+
+.memberAvatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  margin-right: 8rpx;
+  border: 2rpx solid $color-bg-card;
+}
+
+.filterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  overflow-x: auto;
+  padding-bottom: 4rpx;
+}
+
+.filterTab {
+  padding: 10rpx 28rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  transition: all $transition-base;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.section {
+  margin-top: $spacing-lg;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.taskCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+  transition: all $transition-base;
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-md;
+}
+
+.typeTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 18rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}
+
+.taskTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  @include text-ellipsis;
+}
+
+.pointsBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, #FFE8CC 0%, #FFD93D 100%);
+  color: #8B6914;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+}
+
+.pointsNum {
+  margin-left: 4rpx;
+}
+
+.taskDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin-bottom: $spacing-md;
+  @include text-ellipsis-multi(2);
+}
+
+.taskMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.metaIcon {
+  margin-right: 6rpx;
+  font-size: $font-size-sm;
+}
+
+.taskPhoto {
+  width: 100%;
+  height: 280rpx;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-md;
+}
+
+.actionBtns {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.btn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+  }
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+}
+
+.btnSuccess {
+  background: linear-gradient(135deg, $color-success 0%, #55EFC4 100%);
+  color: $color-text-white;
+}
+
+.btnDanger {
+  background: linear-gradient(135deg, $color-error 0%, #FF8787 100%);
+  color: $color-text-white;
+}
+
+.btnSecondary {
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+}
+
+.fab {
+  position: fixed;
+  right: $page-padding;
+  bottom: 180rpx;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 138, 0.4);
+  z-index: 100;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.fabIcon {
+  font-size: 48rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.pendingReview {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, rgba(84, 160, 255, 0.1) 0%, rgba(84, 160, 255, 0.05) 100%);
+  border-radius: $radius-md;
+  margin-bottom: $spacing-md;
+  border: 2rpx solid rgba(84, 160, 255, 0.2);
+}
+
+.pendingText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: #54A0FF;
+  font-weight: $font-weight-medium;
+}
+
+.pendingCount {
+  background: #54A0FF;
+  color: $color-text-white;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+}

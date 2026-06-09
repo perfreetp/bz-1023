@@ -1,0 +1,551 @@
+@use '@/styles/variables.scss' as *;
+
+.memberTabs {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-border-light;
+  overflow-x: auto;
+
+  .tabItem {
+    padding: $spacing-xs $spacing-lg;
+    border-radius: $radius-round;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    background: $color-bg-hover;
+    flex-shrink: 0;
+    transition: all $transition-base;
+
+    &.active {
+      background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+      color: $color-text-white;
+      font-weight: $font-weight-semibold;
+      box-shadow: 0 4rpx 12rpx rgba(255, 107, 138, 0.25);
+    }
+  }
+}
+
+.viewSwitcher {
+  display: flex;
+  margin: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-radius: $radius-round;
+  padding: 6rpx;
+  box-shadow: $shadow-card;
+
+  .switchBtn {
+    flex: 1;
+    padding: $spacing-xs 0;
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    border-radius: $radius-round;
+    transition: all $transition-base;
+
+    &.active {
+      background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+      color: $color-text-white;
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+.timeline {
+  position: relative;
+  padding: $spacing-md $page-padding;
+  padding-left: 60rpx;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 36rpx;
+    top: 20rpx;
+    bottom: 20rpx;
+    width: 4rpx;
+    background: linear-gradient(180deg, $color-primary 0%, $color-secondary 50%, #A8E6CF 100%);
+    border-radius: $radius-round;
+  }
+}
+
+.yearMonth {
+  display: flex;
+  align-items: center;
+  margin: $spacing-lg 0 $spacing-md;
+  margin-left: -36rpx;
+  position: relative;
+
+  .dot {
+    width: 28rpx;
+    height: 28rpx;
+    border-radius: $radius-round;
+    margin-right: $spacing-sm;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 6rpx rgba(255, 255, 255, 1), 0 0 0 10rpx currentColor;
+    opacity: 0.9;
+  }
+
+  .label {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+  }
+
+  .count {
+    margin-left: auto;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}
+
+.timelineCard {
+  position: relative;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -34rpx;
+    top: $spacing-md;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: $radius-round;
+    background: $color-bg-card;
+    border: 4rpx solid $color-primary;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  }
+
+  &.milestone {
+    &::before {
+      background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+      border: 4rpx solid $color-text-white;
+      box-shadow: 0 0 0 6rpx rgba(255, 107, 138, 0.2), 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+    }
+
+    .cardIcon {
+      position: absolute;
+      left: -56rpx;
+      top: $spacing-md;
+      width: 36rpx;
+      height: 36rpx;
+      background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+      border-radius: $radius-round;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20rpx;
+      color: $color-text-white;
+      z-index: 2;
+      box-shadow: 0 2rpx 8rpx rgba(255, 107, 138, 0.4);
+    }
+  }
+
+  .cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-xs;
+  }
+
+  .cardMember {
+    display: flex;
+    align-items: center;
+
+    .avatar {
+      width: 44rpx;
+      height: 44rpx;
+      border-radius: $radius-round;
+      margin-right: $spacing-xs;
+      border: 2rpx solid $color-border-light;
+    }
+
+    .name {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+  }
+
+  .cardTime {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}
+
+.milestoneBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  background: linear-gradient(135deg, rgba(255, 159, 67, 0.15) 0%, rgba(255, 217, 61, 0.15) 100%);
+  color: #E67E22;
+  font-size: 20rpx;
+  border-radius: $radius-round;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-xs;
+
+  .badgeIcon {
+    margin-right: 6rpx;
+  }
+}
+
+.cardTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  line-height: 1.4;
+}
+
+.cardDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.7;
+  margin-bottom: $spacing-sm;
+}
+
+.photoGrid {
+  display: grid;
+  gap: 8rpx;
+  margin-top: $spacing-xs;
+
+  &.cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  &.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .photoItem {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    background: $color-bg-hover;
+
+    .photo {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.gridView {
+  padding: $spacing-sm;
+  column-count: 3;
+  column-gap: $spacing-xs;
+
+  .gridPhoto {
+    width: 100%;
+    break-inside: avoid;
+    margin-bottom: $spacing-xs;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    background: $color-bg-hover;
+    position: relative;
+
+    .photo {
+      width: 100%;
+      display: block;
+    }
+  }
+}
+
+.fabBtn {
+  position: fixed;
+  right: $page-padding;
+  bottom: 120rpx;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  font-size: 56rpx;
+  box-shadow: 0 8rpx 28rpx rgba(255, 107, 138, 0.45);
+  z-index: 100;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+.modalMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modalContent {
+  width: 100%;
+  max-height: 90vh;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc($spacing-lg + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+
+  .modalTitle {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+  }
+
+  .modalClose {
+    width: 56rpx;
+    height: 56rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40rpx;
+    color: $color-text-tertiary;
+    background: $color-bg-hover;
+    border-radius: $radius-round;
+  }
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+
+  .formLabel {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-sm;
+    display: block;
+  }
+
+  .memberOptions {
+    display: flex;
+    gap: $spacing-sm;
+    flex-wrap: wrap;
+
+    .memberOption {
+      display: flex;
+      align-items: center;
+      padding: $spacing-xs $spacing-md;
+      border-radius: $radius-round;
+      background: $color-bg-hover;
+      transition: all $transition-base;
+
+      .avatar {
+        width: 40rpx;
+        height: 40rpx;
+        border-radius: $radius-round;
+        margin-right: $spacing-xs;
+      }
+
+      .name {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, rgba(255, 107, 138, 0.15) 0%, rgba(78, 205, 196, 0.15) 100%);
+        border: 2rpx solid $color-primary;
+
+        .name {
+          color: $color-primary;
+          font-weight: $font-weight-semibold;
+        }
+      }
+    }
+  }
+
+  .inputBox {
+    background: $color-bg-hover;
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    border: 2rpx solid transparent;
+    transition: all $transition-base;
+
+    &:focus {
+      border-color: $color-primary;
+      background: $color-bg-card;
+    }
+  }
+
+  .textareaBox {
+    width: 100%;
+    min-height: 160rpx;
+    background: $color-bg-hover;
+    border-radius: $radius-md;
+    padding: $spacing-md;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    line-height: 1.6;
+    border: 2rpx solid transparent;
+    box-sizing: border-box;
+    transition: all $transition-base;
+
+    &:focus {
+      border-color: $color-primary;
+      background: $color-bg-card;
+    }
+  }
+
+  .switchRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $color-bg-hover;
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+
+    .switchLabel {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+
+      .icon {
+        margin-right: $spacing-xs;
+      }
+    }
+  }
+
+  .milestoneOptions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-sm;
+    margin-top: $spacing-sm;
+
+    .milestoneOption {
+      padding: $spacing-sm $spacing-xs;
+      text-align: center;
+      border-radius: $radius-md;
+      background: $color-bg-hover;
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+      transition: all $transition-base;
+
+      .optionIcon {
+        display: block;
+        font-size: 36rpx;
+        margin-bottom: 4rpx;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, rgba(255, 159, 67, 0.15) 0%, rgba(255, 217, 61, 0.15) 100%);
+        color: #E67E22;
+        font-weight: $font-weight-semibold;
+        border: 2rpx solid #FF9F43;
+      }
+    }
+  }
+
+  .uploadArea {
+    .photoList {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: $spacing-sm;
+
+      .photoItem {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: $radius-md;
+        overflow: hidden;
+        background: $color-bg-hover;
+
+        .photo {
+          width: 100%;
+          height: 100%;
+        }
+
+        .removeBtn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 36rpx;
+          height: 36rpx;
+          background: rgba(0, 0, 0, 0.6);
+          color: $color-text-white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 24rpx;
+          border-bottom-left-radius: $radius-md;
+        }
+      }
+
+      .addBtn {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: $radius-md;
+        border: 2rpx dashed $color-border;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: $color-text-tertiary;
+        font-size: $font-size-xs;
+
+        .plus {
+          font-size: 48rpx;
+          line-height: 1;
+          margin-bottom: 4rpx;
+        }
+      }
+    }
+  }
+}
+
+.submitBtn {
+  width: 100%;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: none;
+  margin-top: $spacing-md;
+  box-shadow: 0 6rpx 20rpx rgba(255, 107, 138, 0.3);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}

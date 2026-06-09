@@ -1,0 +1,292 @@
+@use '@/styles/variables.scss' as *;
+
+.header {
+  margin: 0 (-$page-padding);
+  padding: $spacing-xl $page-padding;
+  padding-top: 48rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 50%, $color-secondary 100%);
+  color: $color-text-white;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -80rpx;
+    right: -80rpx;
+    width: 280rpx;
+    height: 280rpx;
+    border-radius: $radius-round;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -100rpx;
+    left: -60rpx;
+    width: 240rpx;
+    height: 240rpx;
+    border-radius: $radius-round;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.memberSwitch {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.memberChip {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all $transition-base;
+
+  &.active {
+    background: rgba(255, 255, 255, 0.95);
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.chipAvatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  margin-right: 8rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+}
+
+.pointsHeader {
+  position: relative;
+  z-index: 1;
+}
+
+.label {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-bottom: $spacing-xs;
+}
+
+.pointsValue {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: $spacing-sm;
+}
+
+.pointsNum {
+  font-size: 88rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+  letter-spacing: -2rpx;
+}
+
+.pointsUnit {
+  font-size: $font-size-lg;
+  opacity: 0.9;
+  margin-left: 8rpx;
+}
+
+.quickStats {
+  display: flex;
+  gap: $spacing-lg;
+  margin-top: $spacing-md;
+  position: relative;
+  z-index: 1;
+}
+
+.quickStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.quickNum {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+}
+
+.quickLabel {
+  font-size: $font-size-xs;
+  opacity: 0.85;
+  margin-top: 2rpx;
+}
+
+.quickDivider {
+  width: 2rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.section {
+  margin-top: $spacing-lg;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sectionAction {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.summaryItem {
+  text-align: center;
+  padding: $spacing-md $spacing-xs;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+}
+
+.summaryIcon {
+  font-size: 36rpx;
+  margin-bottom: 6rpx;
+}
+
+.summaryNum {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.summaryLabel {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 2rpx;
+}
+
+.recordsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.recordItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.recordIcon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.recordInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.recordTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+  @include text-ellipsis;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.recordAmount {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}
+
+.typeFilter {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.typeBtn {
+  padding: 10rpx 24rpx;
+  border-radius: $radius-round;
+  background: $color-bg-soft;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.actionBtns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+}
+
+.actionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md $spacing-xs;
+  border-radius: $radius-md;
+  background: $color-bg-soft;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.actionIcon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.actionLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}

@@ -1,0 +1,452 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+}
+
+.rewardImage {
+  width: 600rpx;
+  height: 600rpx;
+  margin: $spacing-lg auto;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  position: relative;
+  box-shadow: $shadow-card;
+}
+
+.soldoutMask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  z-index: 2;
+}
+
+.infoSection {
+  padding: 0 $page-padding;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.categoryTag {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background: rgba(255, 107, 138, 0.12);
+  padding: 6rpx 16rpx;
+  border-radius: $radius-xs;
+  display: inline-block;
+}
+
+.rewardName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: $line-height-tight;
+  flex: 1;
+  margin-right: $spacing-md;
+}
+
+.priceSection {
+  display: flex;
+  align-items: baseline;
+  margin: $spacing-md 0;
+}
+
+.priceValue {
+  font-size: 72rpx;
+  font-weight: $font-weight-bold;
+  color: $color-warning;
+  line-height: 1;
+}
+
+.priceUnit {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-warning;
+  margin-left: 6rpx;
+}
+
+.originalPrice {
+  font-size: $font-size-md;
+  color: $color-text-disabled;
+  text-decoration: line-through;
+  margin-left: $spacing-md;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm $spacing-md;
+  padding: $spacing-md 0;
+  border-top: 1rpx solid $color-border-light;
+  border-bottom: 1rpx solid $color-border-light;
+}
+
+.stockBadge {
+  display: inline-flex;
+  align-items: center;
+  font-size: $font-size-xs;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-round;
+  background: rgba(0, 184, 148, 0.1);
+  color: $color-success;
+
+  &.warning {
+    background: rgba(255, 159, 67, 0.12);
+    color: $color-warning;
+  }
+
+  &.danger {
+    background: rgba(255, 107, 138, 0.12);
+    color: $color-error;
+  }
+}
+
+.soldBadge {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.approvalBadge {
+  font-size: $font-size-xs;
+  color: #54a0ff;
+  background: rgba(84, 160, 255, 0.12);
+  padding: 6rpx 16rpx;
+  border-radius: $radius-round;
+}
+
+.section {
+  padding: $spacing-lg $page-padding;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.description {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}
+
+.stepperSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $page-padding;
+  background: $color-bg-card;
+  margin: 0 $page-padding;
+  border-radius: $radius-lg;
+}
+
+.stepperLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  background: $color-bg-soft;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.stepperBtn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xl;
+  color: $color-text-primary;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-fast;
+
+  &:active {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.disabled {
+    color: $color-text-disabled;
+  }
+}
+
+.stepperValue {
+  min-width: 80rpx;
+  text-align: center;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.bottomBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  z-index: 100;
+}
+
+.pointsInfo {
+  flex: 1;
+}
+
+.pointsCurrent {
+  display: flex;
+  align-items: baseline;
+}
+
+.pointsCurrentLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-right: $spacing-xs;
+}
+
+.pointsCurrentValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.pointsCurrentUnit {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-left: 4rpx;
+}
+
+.pointsNeeded {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 4rpx;
+}
+
+.pointsInsufficient {
+  color: $color-error;
+}
+
+.exchangeBtn {
+  @include button-reset;
+  height: $button-height-lg;
+  padding: 0 56rpx;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 6rpx 20rpx rgba(255, 107, 138, 0.3);
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.97);
+  }
+
+  &.disabled {
+    background: $color-text-disabled;
+    box-shadow: none;
+  }
+}
+
+.parentActions {
+  display: flex;
+  gap: $spacing-md;
+  width: 100%;
+}
+
+.actionBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-base;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.97);
+  }
+
+  &.edit {
+    background: $color-bg-soft;
+    color: $color-text-primary;
+  }
+
+  &.offline {
+    background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+    color: $color-text-white;
+    box-shadow: 0 6rpx 20rpx rgba(214, 48, 49, 0.25);
+  }
+}
+
+.modalMask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modalContent {
+  width: 620rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  box-shadow: $shadow-popup;
+}
+
+.modalHeader {
+  padding: $spacing-xl $spacing-lg $spacing-md;
+  text-align: center;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.modalSubtitle {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.modalBody {
+  padding: 0 $spacing-lg $spacing-lg;
+}
+
+.pointsDeduct {
+  background: linear-gradient(135deg, #fff5f6 0%, #ffe9ec 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  text-align: center;
+  margin-bottom: $spacing-md;
+}
+
+.deductLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.deductValue {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.deductNum {
+  font-size: 64rpx;
+  font-weight: $font-weight-bold;
+  color: $color-error;
+  line-height: 1;
+}
+
+.deductUnit {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-error;
+  margin-left: 6rpx;
+}
+
+.deductRemain {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: $spacing-sm;
+}
+
+.quantityRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  border-top: 1rpx solid $color-border-light;
+}
+
+.quantityLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.quantityValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.approvalTip {
+  background: rgba(84, 160, 255, 0.1);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  margin-top: $spacing-md;
+  display: flex;
+  align-items: flex-start;
+}
+
+.approvalTipIcon {
+  font-size: $font-size-md;
+  margin-right: $spacing-xs;
+  flex-shrink: 0;
+}
+
+.approvalTipText {
+  font-size: $font-size-xs;
+  color: #54a0ff;
+  line-height: 1.6;
+}
+
+.modalFooter {
+  display: flex;
+  border-top: 1rpx solid $color-border-light;
+}
+
+.modalBtn {
+  @include button-reset;
+  flex: 1;
+  height: 96rpx;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-fast;
+
+  &:active {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  &.cancel {
+    color: $color-text-secondary;
+  }
+
+  &.confirm {
+    color: $color-primary;
+    border-left: 1rpx solid $color-border-light;
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}

@@ -1,0 +1,298 @@
+@use '@/styles/variables.scss' as *;
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.statsItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md $spacing-sm;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.statsNum {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: 1.2;
+
+  &.pending {
+    color: $color-primary;
+  }
+
+  &.approved {
+    color: #00B894;
+  }
+
+  &.rejected {
+    color: #FF6B6B;
+  }
+}
+
+.statsLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.filterTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  background: $color-bg-card;
+  padding: $spacing-xs;
+  border-radius: $radius-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.tabItem {
+  flex: 1;
+  padding: 16rpx 0;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.approvalCard {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.rewardImage {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  margin-right: $spacing-md;
+}
+
+.cardContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.rewardName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+  flex: 1;
+  margin-right: $spacing-sm;
+}
+
+.statusBadge {
+  flex-shrink: 0;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+
+  &.pending {
+    background: rgba(84, 160, 255, 0.12);
+    color: #54A0FF;
+  }
+
+  &.approved {
+    background: rgba(0, 184, 148, 0.12);
+    color: #00B894;
+  }
+
+  &.rejected {
+    background: rgba(255, 107, 107, 0.12);
+    color: #FF6B6B;
+  }
+
+  &.delivered {
+    background: rgba(99, 110, 114, 0.12);
+    color: #636E72;
+  }
+}
+
+.exchangeInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.memberAvatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  margin-right: 8rpx;
+  border: 2rpx solid $color-bg-soft;
+}
+
+.memberName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-right: $spacing-sm;
+}
+
+.quantity {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.exchangeTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.pointsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: $spacing-sm;
+}
+
+.pointsValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: #FF9F43;
+}
+
+.pointsUnit {
+  font-size: $font-size-xs;
+  color: #FF9F43;
+  margin-left: 4rpx;
+}
+
+.actionRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+}
+
+.approveBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, #00B894 0%, #55EFC4 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: none;
+  @include button-reset;
+
+  &:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.rejectBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-card;
+  color: #FF6B6B;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: 2rpx solid #FF6B6B;
+  @include button-reset;
+
+  &:active {
+    background: rgba(255, 107, 107, 0.08);
+    transform: scale(0.98);
+  }
+}
+
+.modalMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 600rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-popup;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalTextarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: $spacing-md;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  margin-bottom: $spacing-lg;
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.cancelBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-soft;
+  color: $color-text-secondary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  border: none;
+  @include button-reset;
+}
+
+.confirmRejectBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  border: none;
+  @include button-reset;
+}

@@ -1,0 +1,296 @@
+@use '@/styles/variables.scss' as *;
+
+.wrapper {
+  padding: $spacing-lg $page-padding 160rpx;
+}
+
+.formCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.formTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.formInput {
+  width: 100%;
+  height: 88rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.formTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.typeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.typeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md $spacing-xs;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  border: 3rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    border-color: $color-primary;
+    background: rgba(255, 107, 138, 0.08);
+  }
+}
+
+.typeIcon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.typeName {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+
+  .active & {
+    color: $color-primary;
+  }
+}
+
+.pointsRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.pointsStepper {
+  display: flex;
+  align-items: center;
+  background: $color-bg-soft;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.stepperBtn {
+  @include button-reset;
+  width: 72rpx;
+  height: 72rpx;
+  font-size: $font-size-xl;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+  background: transparent;
+
+  &:active {
+    background: rgba(255, 107, 138, 0.1);
+  }
+}
+
+.stepperValue {
+  min-width: 80rpx;
+  text-align: center;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
+.quickPoints {
+  display: flex;
+  gap: $spacing-xs;
+  flex: 1;
+}
+
+.quickPoint {
+  flex: 1;
+  padding: 12rpx 0;
+  text-align: center;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+  }
+}
+
+.memberSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.memberChip {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-soft;
+  border-radius: $radius-round;
+  border: 3rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    border-color: $color-primary;
+    background: rgba(255, 107, 138, 0.08);
+  }
+}
+
+.chipAvatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  margin-right: 8rpx;
+}
+
+.chipName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  .active & {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.submitBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 138, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}
+
+.bonusRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-sm;
+}
+
+.bonusRowItem {
+  flex: 1;
+}
+
+.bonusRowLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 8rpx;
+}
+
+.bonusRowValue {
+  display: flex;
+  align-items: center;
+  background: $color-bg-soft;
+  border-radius: $radius-round;
+  padding: 4rpx;
+}
+
+.bonusStepperBtn {
+  @include button-reset;
+  width: 56rpx;
+  height: 56rpx;
+  font-size: $font-size-lg;
+  color: $color-secondary;
+  font-weight: $font-weight-bold;
+  background: transparent;
+}
+
+.bonusStepperValue {
+  flex: 1;
+  text-align: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-secondary;
+}
+
+.reminderRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.reminderItem {
+  padding: 10rpx 24rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  &.active {
+    background: $color-secondary;
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.wordAlert {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-error;
+  margin-top: $spacing-sm;
+  font-size: $font-size-xs;
+  color: $color-error;
+}

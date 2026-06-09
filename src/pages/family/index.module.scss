@@ -1,0 +1,640 @@
+@use '@/styles/variables.scss' as *;
+
+.familyHeader {
+  margin: 0 (-$page-padding);
+  padding: $spacing-xl $page-padding;
+  padding-top: 48rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 50%, $color-secondary 100%);
+  color: $color-text-white;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: $spacing-lg;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100rpx;
+    right: -100rpx;
+    width: 320rpx;
+    height: 320rpx;
+    border-radius: $radius-round;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -120rpx;
+    left: -80rpx;
+    width: 280rpx;
+    height: 280rpx;
+    border-radius: $radius-round;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.familyName {
+  position: relative;
+  z-index: 1;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  line-height: 1.3;
+  margin-bottom: $spacing-xs;
+}
+
+.familySubtitle {
+  position: relative;
+  z-index: 1;
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  margin-bottom: $spacing-lg;
+}
+
+.statsRow {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 20rpx;
+  opacity: 0.85;
+  margin-top: 4rpx;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  margin-top: $spacing-lg;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.parentCard {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.parentInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: $spacing-md;
+}
+
+.parentName {
+  display: flex;
+  align-items: center;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.roleTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx 16rpx;
+  border-radius: $radius-round;
+  font-size: 20rpx;
+  font-weight: $font-weight-medium;
+  margin-left: $spacing-sm;
+
+  &.dad {
+    background: rgba(84, 160, 255, 0.15);
+    color: #54A0FF;
+  }
+
+  &.mom {
+    background: rgba(255, 107, 138, 0.15);
+    color: #FF6B8A;
+  }
+}
+
+.parentSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.manageBtn {
+  @include button-reset;
+  padding: 12rpx 28rpx;
+  height: auto;
+  border-radius: $radius-button;
+  background: $color-bg-soft;
+  color: $color-text-secondary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.childCard {
+  display: flex;
+  align-items: center;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+  position: relative;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.99);
+  }
+}
+
+.rankBadge {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  flex-shrink: 0;
+  margin-right: $spacing-sm;
+}
+
+.childContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.childTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.childNameRow {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.childName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.streakTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 14rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, rgba(255, 159, 67, 0.15) 0%, rgba(255, 217, 61, 0.15) 100%);
+  color: #FF9F43;
+  font-size: 20rpx;
+  font-weight: $font-weight-medium;
+  margin-left: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.pointsBig {
+  display: flex;
+  align-items: baseline;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+}
+
+.pointsNum {
+  font-size: 44rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  line-height: 1;
+}
+
+.pointsUnit {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-left: 2rpx;
+}
+
+.pointsSub {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.pointsBar {
+  width: 100%;
+  height: 12rpx;
+  border-radius: $radius-round;
+  background: $color-bg-soft;
+  overflow: hidden;
+  margin-bottom: $spacing-md;
+}
+
+.pointsBarFill {
+  height: 100%;
+  border-radius: $radius-round;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 50%, $color-secondary 100%);
+  transition: width $transition-slow ease;
+}
+
+.actionBtns {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.actionBtn {
+  @include button-reset;
+  flex: 1;
+  height: 64rpx;
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &.plus {
+    background: linear-gradient(135deg, rgba(0, 184, 148, 0.1) 0%, rgba(0, 184, 148, 0.05) 100%);
+    color: $color-success;
+  }
+
+  &.minus {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+    color: $color-error;
+  }
+
+  &.detail {
+    background: $color-bg-soft;
+    color: $color-text-secondary;
+  }
+}
+
+.adjustModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $page-padding;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 620rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-popup;
+}
+
+.modalTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  text-align: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalMember {
+  display: flex;
+  align-items: center;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.modalMemberName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-left: $spacing-md;
+}
+
+.modalLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.pointStepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xl;
+  background: $color-bg-soft;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+}
+
+.stepperBtn {
+  @include button-reset;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.94);
+  }
+}
+
+.stepperValue {
+  font-size: 72rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  min-width: 120rpx;
+  text-align: center;
+  line-height: 1;
+}
+
+.pointTypeTabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.typeTab {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-soft;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  transition: all $transition-base;
+
+  &.active {
+    &.earn, &.reward {
+      background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+      color: $color-text-white;
+    }
+
+    &.deduct {
+      background: linear-gradient(135deg, $color-error 0%, #FF8787 100%);
+      color: $color-text-white;
+    }
+  }
+}
+
+.descInput {
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-bottom: $spacing-lg;
+  font-size: $font-size-sm;
+
+  :global {
+    textarea {
+      width: 100%;
+      min-height: 160rpx;
+      font-size: $font-size-sm;
+      line-height: 1.6;
+    }
+  }
+}
+
+.modalActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.modalBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.cancel {
+    background: $color-bg-soft;
+    color: $color-text-secondary;
+  }
+
+  &.confirm {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    box-shadow: 0 4rpx 16rpx rgba(255, 107, 138, 0.3);
+  }
+}
+
+.fabBtn {
+  position: fixed;
+  right: $page-padding;
+  bottom: 180rpx;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 138, 0.4);
+  z-index: 100;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.fabIcon {
+  font-size: 56rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+}
+
+.addModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.addContent {
+  width: 100%;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: $spacing-xl;
+  padding-bottom: 64rpx;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.addHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xl;
+}
+
+.addTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.addClose {
+  font-size: 48rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+  padding: $spacing-xs;
+}
+
+.avatarUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: $spacing-xl;
+}
+
+.avatarPreview {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-round;
+  border: 4rpx dashed $color-primary-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: $spacing-sm;
+  background: $color-bg-soft;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+}
+
+.avatarPlaceholder {
+  font-size: 64rpx;
+  opacity: 0.5;
+}
+
+.avatarText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.formGroup {
+  margin-bottom: $spacing-lg;
+}
+
+.formLabel {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.formInput {
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+
+  :global {
+    input {
+      width: 100%;
+      font-size: $font-size-md;
+    }
+  }
+}
+
+.roleSelector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}
+
+.roleOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-lg $spacing-md;
+  border-radius: $radius-lg;
+  background: $color-bg-soft;
+  border: 4rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    border-color: $color-primary;
+    background: rgba(255, 107, 138, 0.08);
+  }
+}
+
+.roleIcon {
+  font-size: 56rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.roleText {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.roleHint {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}

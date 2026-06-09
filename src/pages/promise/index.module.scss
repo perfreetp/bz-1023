@@ -1,0 +1,472 @@
+@use '@/styles/variables.scss' as *;
+
+.wrapper {
+  padding: $spacing-lg $page-padding 160rpx;
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.statsHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-xl;
+  padding: $spacing-xl $spacing-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 138, 0.25);
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.statItem {
+  flex: 1;
+  text-align: center;
+
+  &:not(:last-child) {
+    border-right: 2rpx solid rgba(255, 255, 255, 0.3);
+  }
+}
+
+.statNum {
+  font-size: 48rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4rpx;
+}
+
+.avatarGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .avatarItem {
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: $radius-round;
+    border: 4rpx solid $color-text-white;
+    overflow: hidden;
+    margin-left: -16rpx;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.filterTabs {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 8rpx;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.filterTab {
+  flex: 1;
+  padding: $spacing-sm 0;
+  text-align: center;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+  font-weight: $font-weight-medium;
+
+  &.active {
+    background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+    color: $color-text-white;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+.promiseCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.statusBadge {
+  padding: 8rpx 20rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+
+  &.active {
+    background: rgba(0, 184, 148, 0.12);
+    color: $color-success;
+  }
+
+  &.pending {
+    background: rgba(255, 159, 67, 0.12);
+    color: $color-warning;
+  }
+
+  &.broken {
+    background: rgba(255, 107, 107, 0.12);
+    color: $color-error;
+  }
+}
+
+.deleteBtn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+  transition: all $transition-base;
+
+  &:active {
+    background: rgba(255, 107, 107, 0.1);
+    color: $color-error;
+  }
+}
+
+.promiseTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  line-height: $line-height-tight;
+  font-family: 'KaiTi', 'STKaiti', serif;
+}
+
+.parchmentBg {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF5D6 100%);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  border: 2rpx solid rgba(255, 200, 100, 0.3);
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 24rpx;
+    height: 24rpx;
+    border-radius: $radius-round;
+    background: rgba(255, 180, 80, 0.2);
+  }
+
+  &::before {
+    top: 12rpx;
+    left: 12rpx;
+  }
+
+  &::after {
+    bottom: 12rpx;
+    right: 12rpx;
+  }
+}
+
+.promiseContent {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: $line-height-loose;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.signSection {
+  margin-bottom: $spacing-lg;
+}
+
+.signTitle {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.signList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.signItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120rpx;
+}
+
+.signAvatarWrap {
+  position: relative;
+  margin-bottom: 8rpx;
+}
+
+.signAvatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  overflow: hidden;
+  border: 4rpx solid $color-border;
+  transition: all $transition-base;
+
+  image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .signed & {
+    border-color: $color-success;
+  }
+}
+
+.signedMark {
+  position: absolute;
+  right: -6rpx;
+  bottom: -6rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: $radius-round;
+  background: $color-success;
+  color: $color-text-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  border: 4rpx solid $color-bg-card;
+  box-shadow: 0 2rpx 8rpx rgba(0, 184, 148, 0.3);
+}
+
+.signName {
+  font-size: $font-size-xs;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: 4rpx;
+  @include text-ellipsis;
+  max-width: 120rpx;
+
+  .pending & {
+    color: $color-text-tertiary;
+  }
+}
+
+.signedTime {
+  font-size: 20rpx;
+  color: $color-success;
+  font-weight: $font-weight-medium;
+}
+
+.pendingText {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+}
+
+.signBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-secondary 0%, $color-secondary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 6rpx 18rpx rgba(78, 205, 196, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}
+
+.fabBtn {
+  position: fixed;
+  right: $page-padding;
+  bottom: calc(60rpx + env(safe-area-inset-bottom));
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  font-size: 56rpx;
+  font-weight: $font-weight-light;
+  box-shadow: 0 8rpx 28rpx rgba(255, 107, 138, 0.4);
+  z-index: 50;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+.createModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+
+  .modalContent {
+    width: 100%;
+    max-height: 90vh;
+    background: $color-bg-card;
+    border-radius: $radius-xl $radius-xl 0 0;
+    padding: $spacing-lg $page-padding;
+    padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.modalTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.modalClose {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: $color-text-tertiary;
+  border-radius: $radius-round;
+
+  &:active {
+    background: $color-bg-soft;
+  }
+}
+
+.modalFormItem {
+  margin-bottom: $spacing-lg;
+}
+
+.modalLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  font-weight: $font-weight-medium;
+}
+
+.modalInput {
+  width: 100%;
+  height: 88rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.modalTextarea {
+  width: 100%;
+  min-height: 200rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.signatorySelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.signatoryChip {
+  display: flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
+  background: $color-bg-soft;
+  border-radius: $radius-round;
+  border: 3rpx solid transparent;
+  transition: all $transition-base;
+
+  &.active {
+    border-color: $color-primary;
+    background: rgba(255, 107, 138, 0.08);
+  }
+}
+
+.chipAvatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  margin-right: 8rpx;
+}
+
+.chipName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  .active & {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.createBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 138, 0.3);
+  margin-top: $spacing-lg;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}

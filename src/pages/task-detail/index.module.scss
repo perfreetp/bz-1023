@@ -1,0 +1,370 @@
+@use '@/styles/variables.scss' as *;
+
+.wrapper {
+  padding: $spacing-lg $page-padding 160rpx;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.formTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.headerSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.typeTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8rpx 20rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-md;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6rpx 18rpx;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  margin-left: $spacing-sm;
+}
+
+.taskTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  line-height: $line-height-tight;
+  margin-bottom: $spacing-sm;
+}
+
+.taskDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
+  border-bottom: 1rpx solid $color-bg-soft;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.pointsHighlight {
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-md;
+}
+
+.bonusHighlight {
+  color: $color-secondary;
+  font-weight: $font-weight-semibold;
+}
+
+.memberList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-soft;
+  border-radius: $radius-lg;
+  min-width: 200rpx;
+}
+
+.memberAvatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.memberInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.memberName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.memberStreak {
+  font-size: $font-size-xs;
+  color: $color-secondary;
+  font-weight: $font-weight-semibold;
+}
+
+.photoSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.photoImage {
+  width: 100%;
+  height: 420rpx;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+}
+
+.photoTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  text-align: right;
+}
+
+.emptyPhoto {
+  width: 100%;
+  height: 240rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+}
+
+.emptyPhotoIcon {
+  font-size: 80rpx;
+  opacity: 0.5;
+}
+
+.uploadBtn {
+  @include button-reset;
+  width: 100%;
+  height: 200rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border: 3rpx dashed $color-primary;
+  border-style: dashed;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.uploadIcon {
+  font-size: 64rpx;
+}
+
+.reviewSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.reviewTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  background: $color-bg-soft;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: 1.6;
+  margin-bottom: $spacing-md;
+}
+
+.reviewBtns {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.rejectBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-soft;
+  color: $color-error;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.approveBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 138, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}
+
+.remarkBox {
+  padding: $spacing-md;
+  background: rgba(255, 107, 107, 0.08);
+  border-radius: $radius-md;
+  border-left: 6rpx solid $color-error;
+  margin-top: $spacing-sm;
+}
+
+.remarkLabel {
+  font-size: $font-size-xs;
+  color: $color-error;
+  font-weight: $font-weight-semibold;
+  margin-bottom: 8rpx;
+}
+
+.remarkText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: $line-height-normal;
+}
+
+.actionBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
+  display: flex;
+  gap: $spacing-md;
+}
+
+.secondaryBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: $color-bg-soft;
+  color: $color-text-secondary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.primaryBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 138, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}
+
+.fullWidthBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 138, 0.3);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.95;
+  }
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.approvedInfo {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(0, 184, 148, 0.08);
+  border-radius: $radius-md;
+  margin-top: $spacing-sm;
+}
+
+.approvedText {
+  font-size: $font-size-xs;
+  color: $color-success;
+}
