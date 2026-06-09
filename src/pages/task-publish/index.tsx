@@ -226,11 +226,11 @@ const TaskPublishPage: React.FC = () => {
             <View style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
               {[3, 7, 14, 30, 100].map((D) => {
                 const remainder = D % bonusDays
-                const isMultiple = remainder === 0
-                const multiplier = D / bonusDays
-                const daysToNext = bonusDays - (remainder || bonusDays)
+                const isTrigger = D >= bonusDays && remainder === 0
+                const daysToNext = D >= bonusDays
+                  ? (remainder === 0 ? bonusDays : bonusDays - remainder)
+                  : bonusDays - D
                 const nextMilestone = D + daysToNext
-                const nextMultiplier = Math.ceil(D / bonusDays)
 
                 return (
                   <View
@@ -245,13 +245,13 @@ const TaskPublishPage: React.FC = () => {
                     <Text style={{ fontSize: '12px', color: '#64748b', display: 'block', marginBottom: '8px' }}>
                       节点 {D}天
                     </Text>
-                    {isMultiple ? (
+                    {isTrigger ? (
                       <Text style={{ fontSize: '13px', color: '#00B894', fontWeight: 600 }}>
-                        满{D}天：+{bonusPoints} × {multiplier}分
+                        满{D}天：+{bonusPoints}分（连续奖励）
                       </Text>
                     ) : (
                       <Text style={{ fontSize: '12px', color: '#54A0FF' }}>
-                        再{daysToNext}天，满{nextMilestone}天 +{bonusPoints} × {nextMultiplier}分
+                        再{daysToNext}天，满{nextMilestone}天 +{bonusPoints}分
                       </Text>
                     )}
                   </View>

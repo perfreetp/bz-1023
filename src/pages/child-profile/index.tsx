@@ -229,6 +229,10 @@ const ChildProfilePage: React.FC = () => {
     Taro.navigateTo({ url: `/pages/reward-detail/index?rewardId=${rewardId}` })
   }
 
+  const goExchangeDetail = (exchangeId: string) => {
+    Taro.navigateTo({ url: `/pages/reward-approval/index?exchangeId=${exchangeId}` })
+  }
+
   const getRecordIcon = (type: string) => {
     const iconMap: Record<string, string> = {
       earn: '✅',
@@ -499,7 +503,7 @@ const ChildProfilePage: React.FC = () => {
                           <View
                             key={exchange.id}
                             className={styles.reportExchangeItem}
-                            onClick={() => goRewardDetail(exchange.rewardId)}
+                            onClick={() => goExchangeDetail(exchange.id)}
                           >
                             <View className={styles.reportExchangeImage}>
                               <Image
@@ -552,6 +556,8 @@ const ChildProfilePage: React.FC = () => {
                   const statusConf = memberStatus ? taskStatusConfig[memberStatus.status] : taskStatusConfig[task.status]
                   const typeConf = taskTypeConfig[task.type]
                   const isDone = memberStatus?.status === 'done'
+                  const earnedPoints = memberStatus?.earnedPoints ?? task.points
+                  const bonusPoints = memberStatus?.bonusPoints ?? 0
                   return (
                     <View key={task.id} className={styles.taskItem}>
                       <View
@@ -570,7 +576,14 @@ const ChildProfilePage: React.FC = () => {
                             {statusConf.label}
                           </View>
                           {isDone && (
-                            <Text className={styles.taskPoints}>+{task.points}</Text>
+                            <>
+                              <Text className={styles.taskPoints}>+{earnedPoints}</Text>
+                              {bonusPoints > 0 && (
+                                <Text className={styles.taskBonusPoints}>
+                                  🎁 +{bonusPoints}
+                                </Text>
+                              )}
+                            </>
                           )}
                           <Text className={styles.taskTime}>
                             {formatRelative(memberStatus?.checkedAt || task.createdAt)}

@@ -296,3 +296,121 @@
   border: none;
   @include button-reset;
 }
+
+.detailPage {
+  padding: $spacing-md;
+}
+
+.detailTitle {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+  text-align: center;
+}
+
+.detailCard {
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  padding: $spacing-lg;
+  box-shadow: 0 2rpx 12rpx rgba(255, 107, 138, 0.06);
+}
+
+.detailRewardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.detailRewardImage {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: $radius-lg;
+  flex-shrink: 0;
+  margin-right: $spacing-lg;
+}
+
+.detailRewardName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.detailMemberRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+}
+
+.detailMemberAvatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-sm;
+  border: 3rpx solid $color-bg-soft;
+}
+
+.detailMemberName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.detailInfoList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.detailInfoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detailInfoLabel {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.detailInfoValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+}
+
+.detailPointsValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: #FF9F43;
+}
+
+.detailRemarkBox {
+  margin-top: $spacing-sm;
+  padding: $spacing-md;
+  border: 2rpx solid #FF6B6B;
+  border-radius: $radius-md;
+  background: rgba(255, 107, 107, 0.05);
+  font-size: $font-size-md;
+  color: #FF6B6B;
+  line-height: 1.5;
+}
+
+.detailDeliveredTime {
+  font-size: $font-size-md;
+  color: #636E72;
+  font-weight: $font-weight-medium;
+}
+
+.detailTimeRow {
+  margin-top: $spacing-lg;
+  padding-top: $spacing-lg;
+  border-top: 2rpx solid $color-divider;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  text-align: center;
+}

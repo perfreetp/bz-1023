@@ -112,15 +112,22 @@ const ReviewCenterPage: React.FC = () => {
     })
   }
 
-  const handlePassTask = (taskId: string, memberId: string, points: number) => {
+  const handlePassTask = (task: any, memberId: string) => {
     if (!isParent) return
     const member = memberMap[memberId]
+    const newStreak = (member?.streak || 0) + 1
+    const isTrigger = newStreak % task.bonusDays === 0 && newStreak >= task.bonusDays
+    const bonus = isTrigger ? task.bonusPoints : 0
+    const daysLeft = isTrigger ? 0 : (task.bonusDays - (newStreak % task.bonusDays || task.bonusDays))
+    const total = task.points + bonus
     Taro.showModal({
-      title: `通过 ${member?.name} 的审核`,
-      content: `确认给 +${points} 积分吗？`,
+      title: `确认通过 ${member?.name} 的打卡？`,
+      content: `基础分 +${task.points}\n连续奖励 ${isTrigger ? '🎁 +' + bonus : '还差' + daysLeft + '天触发'}\n合计 +${total}`,
+      confirmText: '确认给分',
+      cancelText: '再想想',
       success: (res) => {
         if (res.confirm) {
-          updateTaskMemberStatus(taskId, memberId, 'done')
+          updateTaskMemberStatus(task.id, memberId, 'done')
           Taro.showToast({ title: '已通过', icon: 'success' })
         }
       }
@@ -257,9 +264,20 @@ const ReviewCenterPage: React.FC = () => {
           </Button>
           <Button
             className={styles.passBtn}
-            onClick={() => handlePassTask(task.id, memberId, task.points)}
+            onClick={() => handlePassTask(task, memberId)}
           >
-            <Text className={styles.passBtnText}>+{task.points}分通过</Text>
+            <Text className={styles.passBtnText}>
+              {(() => {
+                const newStreak = member.streak + 1
+                const isTrigger = newStreak % task.bonusDays === 0 && newStreak >= task.bonusDays
+                const bonus = isTrigger ? task.bonusPoints : 0
+                const daysLeft = isTrigger ? 0 : (task.bonusDays - (newStreak % task.bonusDays || task.bonusDays))
+                if (isTrigger) {
+                  return `✅ 通过 +${task.points} 🎁 +${bonus} = +${task.points + bonus}`
+                }
+                return `✅ 通过 +${task.points}（还差${daysLeft}天）`
+              })()}
+            </Text>
           </Button>
         </View>
       </View>

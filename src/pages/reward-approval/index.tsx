@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react'
 import { View, Text, Image, Button, Textarea } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useRouter } from '@tarojs/taro'
 import classnames from 'classnames'
 import styles from './index.module.scss'
 import { useAppStore } from '../../store/useAppStore'
-import { formatRelative } from '../../utils'
+import { formatRelative, formatDate } from '../../utils'
 import EmptyState from '../../components/EmptyState'
 
 const filterTabs = [
@@ -18,10 +18,13 @@ const statusTextMap: Record<string, string> = {
   pending: '待审批',
   approved: '已通过',
   rejected: '已驳回',
-  delivered: '已发货'
+  delivered: '已发放'
 }
 
 const RewardApprovalPage: React.FC = () => {
+  const router = useRouter()
+  const exchangeId = router.params.exchangeId
+
   const { exchangeRecords, approveExchange, familyMembers, currentRole } = useAppStore()
   const [statusFilter, setStatusFilter] = useState('all')
   const [rejectModalVisible, setRejectModalVisible] = useState(false)
@@ -91,6 +94,87 @@ const RewardApprovalPage: React.FC = () => {
     setRejectModalVisible(false)
     setCurrentRejectId('')
     setRejectReason('')
+  }
+
+  if (exchangeId) {
+    const record = exchangeRecords.find((e) => e.id === exchangeId)
+
+    if (!record) {
+      return (
+        <View className="page-container">
+          <EmptyState icon="📋" title="记录不存在" desc="该兑换记录不存在或已被删除" />
+        </View>
+      )
+    }
+
+    return (
+      <View className="page-container">
+        <View className={styles.detailPage}>
+          <Text className={styles.detailTitle}>兑换记录详情</Text>
+
+          <View className={styles.detailCard}>
+            <View className={styles.detailRewardHeader}>
+              <Image
+                className={styles.detailRewardImage}
+                src={record.rewardImage}
+                mode="aspectFill"
+              />
+              <Text className={styles.detailRewardName}>{record.rewardName}</Text>
+            </View>
+
+            <View className={styles.detailMemberRow}>
+              <Image
+                className={styles.detailMemberAvatar}
+                src={memberAvatarMap[record.memberName] || ''}
+                mode="aspectFill"
+              />
+              <Text className={styles.detailMemberName}>{record.memberName}</Text>
+            </View>
+
+            <View className={styles.detailInfoList}>
+              <View className={styles.detailInfoItem}>
+                <Text className={styles.detailInfoLabel}>兑换数量</Text>
+                <Text className={styles.detailInfoValue}>×{record.quantity}</Text>
+              </View>
+
+              <View className={styles.detailInfoItem}>
+                <Text className={styles.detailInfoLabel}>消耗积分</Text>
+                <Text className={styles.detailPointsValue}>+{record.points}</Text>
+              </View>
+
+              <View className={styles.detailInfoItem}>
+                <Text className={styles.detailInfoLabel}>审批状态</Text>
+                <View className={classnames(styles.statusBadge, styles[record.status])}>
+                  {statusTextMap[record.status] || record.status}
+                </View>
+              </View>
+
+              {record.remark && (
+                <View className={styles.detailInfoItem} style={{ alignItems: 'flex-start' }}>
+                  <Text className={styles.detailInfoLabel}>驳回原因</Text>
+                  <View style={{ flex: 1, maxWidth: '65%' }}>
+                    <View className={styles.detailRemarkBox}>{record.remark}</View>
+                  </View>
+                </View>
+              )}
+
+              {record.status === 'delivered' && record.approvedAt && (
+                <View className={styles.detailInfoItem}>
+                  <Text className={styles.detailInfoLabel}>发放时间</Text>
+                  <Text className={styles.detailDeliveredTime}>
+                    {formatDate(record.approvedAt, 'YYYY-MM-DD HH:mm')}
+                  </Text>
+                </View>
+              )}
+            </View>
+
+            <View className={styles.detailTimeRow}>
+              兑换时间：{formatDate(record.createdAt, 'YYYY-MM-DD HH:mm')}
+            </View>
+          </View>
+        </View>
+      </View>
+    )
   }
 
   return (

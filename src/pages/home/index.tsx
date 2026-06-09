@@ -99,23 +99,38 @@ const HomePage: React.FC = () => {
     }
   }
 
-  const handleApprove = (taskId: string, memberId: string, pass: boolean) => {
+  const handleApprove = (task: any, memberId: string, pass: boolean) => {
     const member = familyMembers.find((m) => m.id === memberId)
-    Taro.showModal({
-      title: pass ? `通过 ${member?.name} 的审核` : `驳回 ${member?.name} 的任务`,
-      content: pass ? '确认给这个孩子该任务的积分吗？' : '请确认要驳回此任务',
-      success: (res) => {
-        if (res.confirm) {
-          if (pass) {
-            updateTaskMemberStatus(taskId, memberId, 'done', '做得很棒！')
+    if (pass) {
+      const newStreak = (member?.streak || 0) + 1
+      const isTrigger = newStreak % task.bonusDays === 0 && newStreak >= task.bonusDays
+      const bonus = isTrigger ? task.bonusPoints : 0
+      const daysLeft = isTrigger ? 0 : (task.bonusDays - (newStreak % task.bonusDays || task.bonusDays))
+      const total = task.points + bonus
+      Taro.showModal({
+        title: `确认通过 ${member?.name} 的打卡？`,
+        content: `基础分 +${task.points}\n连续奖励 ${isTrigger ? '🎁 +' + bonus : '还差' + daysLeft + '天触发'}\n合计 +${total}`,
+        confirmText: '确认给分',
+        cancelText: '再想想',
+        success: (res) => {
+          if (res.confirm) {
+            updateTaskMemberStatus(task.id, memberId, 'done', '做得很棒！')
             Taro.showToast({ title: '已通过', icon: 'success' })
-          } else {
-            updateTaskMemberStatus(taskId, memberId, 'rejected', '请重新完成')
+          }
+        }
+      })
+    } else {
+      Taro.showModal({
+        title: `驳回 ${member?.name} 的任务`,
+        content: '请确认要驳回此任务',
+        success: (res) => {
+          if (res.confirm) {
+            updateTaskMemberStatus(task.id, memberId, 'rejected', '请重新完成')
             Taro.showToast({ title: '已驳回', icon: 'none' })
           }
         }
-      }
-    })
+      })
+    }
   }
 
   const goPublish = () => {
@@ -408,7 +423,7 @@ const HomePage: React.FC = () => {
                                       className={classnames(styles.btn, styles.btnDanger)}
                                       onClick={(e) => {
                                         e.stopPropagation()
-                                        handleApprove(task.id, m.id, false)
+                                        handleApprove(task, m.id, false)
                                       }}
                                     >
                                       驳回
@@ -417,10 +432,24 @@ const HomePage: React.FC = () => {
                                       className={classnames(styles.btn, styles.btnSuccess)}
                                       onClick={(e) => {
                                         e.stopPropagation()
-                                        handleApprove(task.id, m.id, true)
+                                        handleApprove(task, m.id, true)
                                       }}
                                     >
-                                      ✅ 通过 +{task.points}
+                                      {(() => {
+                                        const newStreak = m.streak + 1
+                                        const isTrigger = newStreak % task.bonusDays === 0 && newStreak >= task.bonusDays
+                                        const bonus = isTrigger ? task.bonusPoints : 0
+                                        const daysLeft = isTrigger ? 0 : (task.bonusDays - (newStreak % task.bonusDays || task.bonusDays))
+                                        if (isTrigger) {
+                                          return `✅ 通过 +${task.points} 🎁 +${bonus} = +${task.points + bonus}`
+                                        }
+                                        return (
+                                          <>
+                                            ✅ 通过 +{task.points}
+                                            <Text style={{ fontSize: 20, opacity: 0.7, marginLeft: 6 }}>（还差{daysLeft}天）</Text>
+                                          </>
+                                        )
+                                      })()}
                                     </Button>
                                   </>
                                 )}
